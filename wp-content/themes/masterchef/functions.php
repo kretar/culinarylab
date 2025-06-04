@@ -70,6 +70,16 @@ function masterchef_scripts() {
     // Recipe specific styles
     wp_enqueue_style('masterchef-recipe', MASTERCHEF_URI . '/assets/css/recipe.css', array(), MASTERCHEF_VERSION);
     
+    // Front page specific styles
+    if (is_front_page()) {
+        wp_enqueue_style('masterchef-front-page', MASTERCHEF_URI . '/assets/css/front-page.css', array(), MASTERCHEF_VERSION);
+    }
+    
+    // Search results page styles
+    if (is_search()) {
+        wp_enqueue_style('masterchef-search', MASTERCHEF_URI . '/assets/css/search.css', array(), MASTERCHEF_VERSION);
+    }
+    
     // Google Fonts for scientific theme
     wp_enqueue_style('masterchef-fonts', 'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600&family=Space+Mono:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap', array(), null);
     
@@ -87,6 +97,113 @@ function masterchef_scripts() {
     }
 }
 add_action('wp_enqueue_scripts', 'masterchef_scripts');
+
+/**
+ * Modify search query for recipes
+ */
+function masterchef_recipe_search_query($query) {
+    // Don't modify queries in the admin
+    if (is_admin()) {
+        return $query;
+    }
+
+    // Check if this is a search query and if we're searching for recipes
+    if ($query->is_main_query() && $query->is_search()) {
+        $post_type = isset($_GET['post_type']) ? $_GET['post_type'] : '';
+        
+        if ($post_type === 'recipe' || empty($post_type)) {
+            // If specifically searching for recipes or it's a general search
+            if ($post_type === 'recipe') {
+                $query->set('post_type', 'recipe');
+            }
+            
+            $search_term = $query->get('s');
+            if (!empty($search_term)) {
+                // Create a custom search configuration
+                global $wpdb;
+                
+                // Clear the standard 's' parameter to prevent default WordPress search
+                $query->set('s', '');
+                
+                // Define meta keys to search in
+                $meta_keys = array(
+                    '_recipe_ingredients',
+                    '_recipe_instructions',
+                );
+                
+                // Start building our custom WHERE clause
+                $meta_search_sql = '';
+                foreach ($meta_keys as $key) {
+                    $meta_search_sql .= $wpdb->prepare(
+                        " OR EXISTS (
+                            SELECT * FROM $wpdb->postmeta 
+                            WHERE $wpdb->postmeta.post_id = $wpdb->posts.ID 
+                            AND $wpdb->postmeta.meta_key = %s 
+                            AND $wpdb->postmeta.meta_value LIKE %s
+                        )",
+                        $key,
+                        '%' . $wpdb->esc_like($search_term) . '%'
+                    );
+                }
+                
+                // Join the custom WHERE clause with the title and content search
+                $search_sql = "
+                    AND (
+                        ($wpdb->posts.post_title LIKE %s)
+                        OR ($wpdb->posts.post_content LIKE %s)
+                        $meta_search_sql
+                    )
+                ";
+                
+                // Add our custom SQL to the query
+                add_filter('posts_where', function($where) use ($wpdb, $search_term, $search_sql) {
+                    return $where . $wpdb->prepare(
+                        $search_sql,
+                        '%' . $wpdb->esc_like($search_term) . '%',
+                        '%' . $wpdb->esc_like($search_term) . '%'
+                    );
+                });
+                
+                // We need to do a GROUP BY to avoid duplicate results
+                add_filter('posts_groupby', function($groupby) use ($wpdb) {
+                    if (!$groupby) {
+                        return "$wpdb->posts.ID";
+                    }
+                    return $groupby;
+                });
+            }
+        }
+    }
+    
+    return $query;
+}
+add_action('pre_get_posts', 'masterchef_recipe_search_query');
+
+/**
+ * Add custom classes to recipe posts while removing the post-type class
+ */
+function masterchef_custom_post_classes($classes, $class, $post_id) {
+    // If this is a recipe post
+    if (get_post_type($post_id) == 'recipe') {
+        // Add experiment class
+        $classes[] = 'experiment';
+        
+        // Remove the 'recipe' class (which is added because it's the post type)
+        $recipe_class_key = array_search('recipe', $classes);
+        if ($recipe_class_key !== false) {
+            unset($classes[$recipe_class_key]);
+        }
+        
+        // Remove the post-type-recipe class
+        $post_type_recipe_key = array_search('post-type-recipe', $classes);
+        if ($post_type_recipe_key !== false) {
+            unset($classes[$post_type_recipe_key]);
+        }
+    }
+    
+    return $classes;
+}
+add_filter('post_class', 'masterchef_custom_post_classes', 10, 3);
 
 /**
  * Register widget areas

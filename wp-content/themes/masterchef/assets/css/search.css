@@ -1,0 +1,109 @@
+/**
+ * Master Chef - Search Results Styles
+ */
+
+/* Search results header */
+.page-header,
+.recipe-archive-header {
+    margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--border-color);
+    position: relative;
+}
+
+.page-title,
+.recipe-archive-title {
+    font-size: 24px;
+    font-family: 'Space Mono', monospace;
+    color: var(--primary-color);
+    margin: 0 0 var(--spacing-sm);
+    position: relative;
+    padding-left: var(--spacing-md);
+}
+
+.page-title:before,
+.recipe-archive-title:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 5px;
+    bottom: 5px;
+    width: 3px;
+    background-color: var(--secondary-color);
+    border-radius: 3px;
+}
+
+.page-title span,
+.recipe-archive-title span {
+    color: var(--secondary-color);
+}
+
+/* No search results */
+.no-results {
+    padding: var(--spacing-lg);
+    background-color: rgba(0,0,0,0.02);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    margin-bottom: var(--spacing-xl);
+}
+
+/* Search results layout */
+.search .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+/* Responsive search results layout */
+@media (max-width: 768px) {
+    .search .posts-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Search form in results page */
+.search-again {
+    margin: var(--spacing-xl) 0;
+    padding: var(--spacing-lg);
+    background-color: rgba(0,0,0,0.02);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+}
+
+.search-again-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 16px;
+    margin-top: 0;
+    margin-bottom: var(--spacing-sm);
+    color: var(--primary-color);
+}
+
+.search-again .search-form {
+    display: flex;
+}
+
+.search-again .search-field {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-right: none;
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+}
+
+.search-again .search-submit {
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 0 20px;
+    cursor: pointer;
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+    transition: background-color 0.2s;
+    font-size: 16px;
+}
+
+.search-again .search-submit:hover {
+    background-color: var(--highlight-color);
+}

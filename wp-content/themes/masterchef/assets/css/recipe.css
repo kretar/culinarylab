@@ -195,6 +195,28 @@
 }
 
 /* Single Recipe - Scientific Experiment Style */
+.experiment {
+    position: relative;
+    background-color: var(--light-color);
+    padding: var(--spacing-xl);
+    margin-top: var(--spacing-xl);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--box-shadow);
+}
+.experiment:before {
+    content: "CULINARY HYPOTHESIS";
+    position: absolute;
+    top: -12px;
+    left: var(--spacing-lg);
+    background-color: var(--primary-color);
+    color: white;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-family: 'Roboto Mono', monospace;
+    letter-spacing: 1px;
+    font-weight: 500;
+}
+
 .recipe {
     position: relative;
     background-color: var(--light-color);
@@ -205,7 +227,6 @@
 }
 
 .recipe:before {
-    content: "EXPERIMENT PROTOCOL";
     position: absolute;
     top: -12px;
     left: var(--spacing-lg);
@@ -303,7 +324,7 @@
 }
 
 .recipe-meta:before {
-    content: "PARAMETERS";
+    content: "EXPERIMENTAL PARAMETERS";
     position: absolute;
     top: -10px;
     left: 15px;
@@ -403,7 +424,7 @@
 }
 
 .recipe-ingredients:before {
-    content: "COMPONENTS";
+    content: "REQUIRED MATERIALS";
     position: absolute;
     top: -10px;
     left: 15px;
@@ -473,7 +494,7 @@
 }
 
 .recipe-instructions:before {
-    content: "PROTOCOL";
+    content: "EXPERIMENTAL PROTOCOL";
     position: absolute;
     top: -22px;
     left: -2px;
@@ -536,7 +557,7 @@
 }
 
 .recipe-tags:before {
-    content: "CLASSIFICATION";
+    content: "TAXONOMIC CLASSIFICATION";
     position: absolute;
     top: -10px;
     left: 0;
@@ -731,7 +752,7 @@
 }
 
 .recipe-servings-control:before {
-    content: "VARIABLE CONTROL";
+    content: "QUANTITY CALIBRATION";
     position: absolute;
     top: -10px;
     left: 15px;
@@ -801,57 +822,11 @@
     margin-bottom: var(--spacing-xl);
 }
 
-.recipe-measurement-conversion {
-    margin-top: var(--spacing-md);
-    padding: var(--spacing-md) var(--spacing-lg);
-    background-color: rgba(0,0,0,0.02);
-    border: 1px solid var(--border-color);
-    position: relative;
-    font-family: 'Roboto Mono', monospace;
-}
 
-.recipe-conversion-row {
-    margin-bottom: var(--spacing-sm);
-    display: flex;
-    align-items: center;
-}
 
-.recipe-measurement-conversion:before {
-    content: "UNIT CONVERSION";
-    position: absolute;
-    top: -10px;
-    left: 15px;
-    background-color: var(--light-color);
-    padding: 0 8px;
-    font-size: 11px;
-    color: var(--secondary-color);
-    font-family: 'Roboto Mono', monospace;
-    letter-spacing: 0.5px;
-}
 
-.recipe-conversion-controls {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: var(--spacing-sm);
-}
 
-.recipe-conversion-option {
-    padding: 4px 8px;
-    font-size: 12px;
-    background: transparent;
-    border: 1px solid var(--border-color);
-    border-radius: 2px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
 
-.recipe-conversion-option:hover,
-.recipe-conversion-option.active {
-    background-color: var(--primary-color);
-    color: white;
-    border-color: var(--primary-color);
-}
 
 /* Print Recipe Button - Laboratory Documentation */
 .recipe-print-button {
@@ -924,7 +899,6 @@
     .recipe-ingredients:before,
     .recipe-instructions:before,
     .recipe-servings-control:before,
-    .recipe-measurement-conversion:before,
     .recipe-tags:before {
         font-size: 10px;
     }
@@ -943,7 +917,7 @@
 /* Print Styles - Laboratory Documentation Export */
 @media print {
     /* Hide non-essential elements when printing */
-    header, footer, .recipe-print-button, .recipe-comments, .site-header, .site-footer, .sidebar, .navigation, .recipe-measurement-conversion {
+    header, footer, .recipe-print-button, .recipe-comments, .site-header, .site-footer, .sidebar, .navigation {
         display: none !important;
     }
     

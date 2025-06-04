@@ -39,8 +39,6 @@ get_header();
                             <?php if (get_post_meta(get_the_ID(), '_recipe_servings', true)) : ?>
                                 <?php masterchef_recipe_servings_control(); ?>
                             <?php endif; ?>
-                            
-                            <?php masterchef_scientific_measurement_conversion(); ?>
                         </div>
 
                         <div class="recipe-description">
