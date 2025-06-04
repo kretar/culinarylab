@@ -112,7 +112,7 @@ function masterchef_recipe_servings_control() {
     
     if ($servings) {
         $is_dutch = strpos(get_locale(), 'nl') !== false;
-        $label = $is_dutch ? __('Pas aantal porties aan:', 'masterchef') : __('Adjust servings:', 'masterchef');
+        $label = $is_dutch ? __('Variabele: Aantal porties', 'masterchef') : __('Variable: Servings Quantity', 'masterchef');
         
         ?>
         <div class="recipe-servings-control">
@@ -122,6 +122,7 @@ function masterchef_recipe_servings_control() {
                    min="1" 
                    max="<?php echo esc_attr($servings * 3); ?>" 
                    value="<?php echo esc_attr($servings); ?>" 
+                   step="1"
                    data-original-servings="<?php echo esc_attr($servings); ?>" />
             <div class="recipe-servings-display">
                 <span class="recipe-servings-value"><?php echo esc_html($servings); ?></span>
@@ -129,6 +130,110 @@ function masterchef_recipe_servings_control() {
         </div>
         <?php
     }
+}
+
+/**
+ * Display scientific measurement conversion controls
+ */
+function masterchef_scientific_measurement_conversion() {
+    $is_dutch = strpos(get_locale(), 'nl') !== false;
+    
+    // Labels
+    $weight_label = $is_dutch ? __('Gewicht:', 'masterchef') : __('Weight:', 'masterchef');
+    $volume_label = $is_dutch ? __('Volume:', 'masterchef') : __('Volume:', 'masterchef');
+    $temp_label = $is_dutch ? __('Temperatuur:', 'masterchef') : __('Temperature:', 'masterchef');
+    
+    ?>
+    <div class="recipe-measurement-conversion">
+        <div class="recipe-conversion-row">
+            <span class="scientific-label"><?php echo $weight_label; ?></span>
+            <div class="recipe-conversion-controls">
+                <button type="button" class="recipe-conversion-option active" data-unit-type="weight" data-convert-to="g">g</button>
+                <button type="button" class="recipe-conversion-option" data-unit-type="weight" data-convert-to="oz">oz</button>
+                <button type="button" class="recipe-conversion-option" data-unit-type="weight" data-convert-to="lb">lb</button>
+            </div>
+        </div>
+        
+        <div class="recipe-conversion-row">
+            <span class="scientific-label"><?php echo $volume_label; ?></span>
+            <div class="recipe-conversion-controls">
+                <button type="button" class="recipe-conversion-option active" data-unit-type="volume" data-convert-to="ml">ml</button>
+                <button type="button" class="recipe-conversion-option" data-unit-type="volume" data-convert-to="fl-oz">fl oz</button>
+                <button type="button" class="recipe-conversion-option" data-unit-type="volume" data-convert-to="cups">cups</button>
+            </div>
+        </div>
+        
+        <div class="recipe-conversion-row">
+            <span class="scientific-label"><?php echo $temp_label; ?></span>
+            <div class="recipe-conversion-controls">
+                <button type="button" class="recipe-conversion-option active" data-unit-type="temp" data-convert-to="c">°C</button>
+                <button type="button" class="recipe-conversion-option" data-unit-type="temp" data-convert-to="f">°F</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get all conversion buttons
+        const conversionButtons = document.querySelectorAll('.recipe-conversion-option');
+        
+        // Add click event listeners
+        conversionButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons in the same group
+                const unitType = this.getAttribute('data-unit-type');
+                document.querySelectorAll(`.recipe-conversion-option[data-unit-type="${unitType}"]`)
+                    .forEach(btn => btn.classList.remove('active'));
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Get conversion target
+                const convertTo = this.getAttribute('data-convert-to');
+                
+                // Convert all relevant measurements
+                convertMeasurements(unitType, convertTo);
+            });
+        });
+        
+        /**
+         * Convert measurements based on unit type and target unit
+         */
+        function convertMeasurements(unitType, targetUnit) {
+            // This would be implemented to convert measurements in the recipe
+            // For example, convert grams to ounces, milliliters to fluid ounces, etc.
+            console.log(`Converting ${unitType} to ${targetUnit}`);
+            
+            // Example conversion factors
+            const conversionFactors = {
+                // Weight conversions
+                'g_to_oz': 0.035274,
+                'g_to_lb': 0.00220462,
+                'oz_to_g': 28.3495,
+                'oz_to_lb': 0.0625,
+                'lb_to_g': 453.592,
+                'lb_to_oz': 16,
+                
+                // Volume conversions
+                'ml_to_fl-oz': 0.033814,
+                'ml_to_cups': 0.00422675,
+                'fl-oz_to_ml': 29.5735,
+                'fl-oz_to_cups': 0.125,
+                'cups_to_ml': 236.588,
+                'cups_to_fl-oz': 8,
+                
+                // Temperature conversions
+                'c_to_f': function(c) { return (c * 9/5) + 32; },
+                'f_to_c': function(f) { return (f - 32) * 5/9; }
+            };
+            
+            // Placeholder for actual conversion implementation
+            // The actual implementation would identify measurement values in the recipe
+            // and convert them based on the selected unit type and target unit
+        }
+    });
+    </script>
+    <?php
 }
 
 /**

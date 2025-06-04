@@ -18,6 +18,10 @@ get_header();
                 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
                     <div class="recipe">
                         <header class="recipe-header">
+                            <div class="recipe-header-scientific">
+                                <span class="recipe-protocol-number">PROTOCOL #<?php echo esc_html(get_the_ID()); ?></span>
+                                <span class="recipe-protocol-ref"><?php echo esc_html(substr(md5(get_the_title()), 0, 6)); ?></span>
+                            </div>
                             <h1 class="recipe-title"><?php the_title(); ?></h1>
                             
                             <?php masterchef_recipe_print_button(); ?>
@@ -31,9 +35,13 @@ get_header();
 
                         <?php masterchef_recipe_meta(); ?>
                         
-                        <?php if (get_post_meta(get_the_ID(), '_recipe_servings', true)) : ?>
-                            <?php masterchef_recipe_servings_control(); ?>
-                        <?php endif; ?>
+                        <div class="recipe-controls">
+                            <?php if (get_post_meta(get_the_ID(), '_recipe_servings', true)) : ?>
+                                <?php masterchef_recipe_servings_control(); ?>
+                            <?php endif; ?>
+                            
+                            <?php masterchef_scientific_measurement_conversion(); ?>
+                        </div>
 
                         <div class="recipe-description">
                             <?php the_content(); ?>

@@ -70,8 +70,8 @@ function masterchef_scripts() {
     // Recipe specific styles
     wp_enqueue_style('masterchef-recipe', MASTERCHEF_URI . '/assets/css/recipe.css', array(), MASTERCHEF_VERSION);
     
-    // Google Fonts
-    wp_enqueue_style('masterchef-fonts', 'https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap', array(), null);
+    // Google Fonts for scientific theme
+    wp_enqueue_style('masterchef-fonts', 'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600&family=Space+Mono:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap', array(), null);
     
     // JavaScript files
     wp_enqueue_script('masterchef-navigation', MASTERCHEF_URI . '/assets/js/navigation.js', array(), MASTERCHEF_VERSION, true);

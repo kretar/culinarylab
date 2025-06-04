@@ -1,83 +1,191 @@
 /*
-Theme Name: Master Chef
+Theme Name: Master Chef - Scientific Edition
 Theme URI: 
 Author: 
 Author URI: 
-Description: A custom theme for the Master Chef recipe website
+Description: A scientific approach to culinary arts inspired by molecular gastronomy and Heston Blumenthal
 Version: 1.0.0
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: masterchef
-Tags: food, cooking, recipes, blog
+Tags: food, molecular gastronomy, scientific cooking, culinary precision
 */
 
 /* Global Styles */
 :root {
-    --primary-color: #e74c3c;
-    --secondary-color: #f39c12;
-    --dark-color: #2c3e50;
-    --light-color: #ecf0f1;
-    --gray-color: #95a5a6;
-    --border-color: #ddd;
+    /* Scientific color palette inspired by laboratory equipment and molecular gastronomy */
+    --primary-color: #1b3a59; /* Deep navy blue - precision */
+    --secondary-color: #48a9a6; /* Teal - scientific innovation */
+    --accent-color: #d4f4dd; /* Light mint - laboratory freshness */
+    --highlight-color: #e14658; /* Bright red for highlights and focus points */
+    --dark-color: #1d1e2c; /* Almost black - precision and focus */
+    --light-color: #f9f9f9; /* Clean white - laboratory cleanliness */
+    --gray-color: #75787b; /* Technical gray - equipment and tools */
+    --border-color: #dadfe1; /* Light gray for borders - clean lines */
+    
+    /* Theme structure */
     --container-width: 1200px;
-    --border-radius: 5px;
-    --box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    --border-radius: 2px; /* More precise, sharper corners */
+    --box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    
+    /* Scientific precision measurements */
+    --spacing-xs: 0.25rem; /* 4px */
+    --spacing-sm: 0.5rem;  /* 8px */
+    --spacing-md: 1rem;    /* 16px */
+    --spacing-lg: 1.5rem;  /* 24px */
+    --spacing-xl: 2.5rem;  /* 40px */
 }
 
 body {
-    font-family: 'Source Sans Pro', Arial, sans-serif;
+    font-family: 'Roboto Mono', 'JetBrains Mono', 'Courier New', monospace;
     line-height: 1.6;
     color: var(--dark-color);
-    background-color: #fff;
+    background-color: var(--light-color);
     margin: 0;
     padding: 0;
+    background-image: linear-gradient(to right, var(--border-color) 1px, transparent 1px),
+                      linear-gradient(to bottom, var(--border-color) 1px, transparent 1px);
+    background-size: 25px 25px;
+    background-position: top left;
+    background-attachment: fixed;
+    background-opacity: 0.3;
 }
 
 a {
-    color: var(--primary-color);
+    color: var(--secondary-color);
     text-decoration: none;
-    transition: color 0.3s;
+    transition: all 0.2s ease-in-out;
+    border-bottom: 1px dotted transparent;
 }
 
 a:hover {
-    color: var(--secondary-color);
+    color: var(--highlight-color);
+    border-bottom: 1px dotted var(--highlight-color);
 }
 
 .container {
     max-width: var(--container-width);
     margin: 0 auto;
-    padding: 0 15px;
+    padding: 0 var(--spacing-lg);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Mono', 'Roboto', sans-serif;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    margin-top: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
+    color: var(--primary-color);
+}
+
+h1 { 
+    font-size: 2.2rem; 
+    position: relative;
+}
+
+h1:after {
+    content: "";
+    display: block;
+    width: 3rem;
+    height: 2px;
+    background-color: var(--highlight-color);
+    margin-top: var(--spacing-sm);
+}
+
+h2 { 
+    font-size: 1.8rem;
+}
+
+h3 { 
+    font-size: 1.5rem;
+}
+
+code, pre {
+    font-family: 'Roboto Mono', monospace;
+    background-color: rgba(0,0,0,0.04);
+    padding: 2px 4px;
+    border-radius: var(--border-radius);
+}
+
+/* Scientific elements */
+.scientific-label {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--gray-color);
+    margin-bottom: var(--spacing-xs);
+    display: block;
+}
+
+.measurement {
+    font-family: 'Roboto Mono', monospace;
+    color: var(--primary-color);
+}
+
+.precise-value {
+    font-feature-settings: "tnum";
+    font-variant-numeric: tabular-nums;
 }
 
 /* Header */
 .site-header {
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    background-color: var(--dark-color);
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
     position: relative;
     z-index: 100;
+    border-bottom: 3px solid var(--secondary-color);
 }
 
 .header-inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px 0;
+    padding: var(--spacing-lg) 0;
+}
+
+.site-branding {
+    display: flex;
+    align-items: center;
+}
+
+.site-branding:before {
+    content: "H₂O";
+    font-family: 'Space Mono', monospace;
+    font-size: 24px;
+    color: var(--highlight-color);
+    margin-right: var(--spacing-md);
+    font-weight: bold;
+    opacity: 0.7;
 }
 
 .site-title {
-    font-size: 24px;
-    font-weight: bold;
+    font-family: 'Space Mono', 'Roboto', sans-serif;
+    font-size: 22px;
+    font-weight: 500;
     margin: 0;
+    letter-spacing: 1px;
+    position: relative;
 }
 
 .site-title a {
-    color: var(--dark-color);
+    color: var(--light-color);
+    border-bottom: none;
+    text-transform: uppercase;
+}
+
+.site-title a:hover {
+    color: var(--accent-color);
+    border-bottom: none;
 }
 
 .site-description {
     margin: 5px 0 0;
-    font-size: 14px;
-    color: var(--gray-color);
+    font-size: 12px;
+    color: var(--accent-color);
+    font-family: 'Roboto Mono', monospace;
+    opacity: 0.85;
+    letter-spacing: 0.5px;
 }
 
 /* Navigation */
@@ -89,49 +197,118 @@ a:hover {
 }
 
 .main-navigation li {
-    margin-left: 20px;
+    margin-left: var(--spacing-xl);
     position: relative;
 }
 
 .main-navigation a {
     display: block;
-    padding: 10px 0;
-    color: var(--dark-color);
-    font-weight: 600;
-    font-size: 16px;
+    padding: var(--spacing-sm) 0;
+    color: var(--light-color);
+    font-weight: 500;
+    font-size: 14px;
+    font-family: 'Roboto Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: none;
+    position: relative;
 }
 
 .main-navigation a:hover {
-    color: var(--primary-color);
+    color: var(--accent-color);
+}
+
+.main-navigation a:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--highlight-color);
+    transition: width 0.2s ease;
+}
+
+.main-navigation a:hover:after {
+    width: 100%;
+}
+
+.current-menu-item > a:after {
+    width: 100%;
+    background-color: var(--secondary-color);
 }
 
 /* Footer */
 .site-footer {
     background-color: var(--dark-color);
     color: var(--light-color);
-    padding: 40px 0;
-    margin-top: 60px;
+    padding: var(--spacing-xl) 0;
+    margin-top: var(--spacing-xl);
+    position: relative;
+    overflow: hidden;
+}
+
+.site-footer:before {
+    content: "CH3CH2OH";
+    font-family: 'Roboto Mono', monospace;
+    position: absolute;
+    right: var(--spacing-xl);
+    top: var(--spacing-lg);
+    font-size: 18px;
+    opacity: 0.1;
+    color: var(--accent-color);
 }
 
 .footer-widgets {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
+    gap: var(--spacing-xl);
+    position: relative;
+    z-index: 1;
 }
 
 .footer-widget h3 {
-    color: #fff;
+    color: var(--accent-color);
     margin-top: 0;
-    font-size: 18px;
+    font-size: 16px;
     border-bottom: 1px solid rgba(255,255,255,0.1);
-    padding-bottom: 10px;
+    padding-bottom: var(--spacing-sm);
+    font-family: 'Roboto Mono', monospace;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.footer-widget ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-widget li {
+    margin-bottom: var(--spacing-sm);
+    font-size: 14px;
+}
+
+.footer-widget a {
+    color: var(--light-color);
+    opacity: 0.8;
+    transition: all 0.2s ease;
+}
+
+.footer-widget a:hover {
+    color: var(--accent-color);
+    opacity: 1;
 }
 
 .footer-bottom {
-    margin-top: 40px;
+    margin-top: var(--spacing-xl);
     text-align: center;
-    padding-top: 20px;
+    padding-top: var(--spacing-lg);
     border-top: 1px solid rgba(255,255,255,0.1);
+    font-family: 'Roboto Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    color: rgba(255,255,255,0.6);
 }
 
 /* Recipe specific styles will be added in recipe.css */
