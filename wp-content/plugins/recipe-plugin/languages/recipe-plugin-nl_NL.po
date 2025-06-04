@@ -1,0 +1,181 @@
+# Copyright (C) 2023 Recipe Plugin
+# This file is distributed under the same license as the Recipe Plugin package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Recipe Plugin 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/recipe-plugin\n"
+"POT-Creation-Date: 2023-05-26 12:00:00+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2023-05-26 12:00:00+00:00\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: nl_NL\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: includes/meta-boxes.php:17
+msgid "Recipe Details"
+msgstr "Recept Details"
+
+#: includes/meta-boxes.php:26
+msgid "Recipe Ingredients"
+msgstr "Recept Ingrediënten"
+
+#: includes/meta-boxes.php:35
+msgid "Recipe Instructions"
+msgstr "Recept Instructies"
+
+#: includes/meta-boxes.php:53
+msgid "Preparation Time (minutes)"
+msgstr "Voorbereidingstijd (minuten)"
+
+#: includes/meta-boxes.php:54
+msgid "Cooking Time (minutes)"
+msgstr "Kooktijd (minuten)"
+
+#: includes/meta-boxes.php:55
+msgid "Number of Servings"
+msgstr "Aantal porties"
+
+#: includes/meta-boxes.php:56
+msgid "Difficulty Level"
+msgstr "Moeilijkheidsgraad"
+
+#: includes/meta-boxes.php:57
+msgid "Easy"
+msgstr "Makkelijk"
+
+#: includes/meta-boxes.php:58
+msgid "Medium"
+msgstr "Gemiddeld"
+
+#: includes/meta-boxes.php:59
+msgid "Hard"
+msgstr "Moeilijk"
+
+#: includes/meta-boxes.php:95
+msgid "Ingredients"
+msgstr "Ingrediënten"
+
+#: includes/meta-boxes.php:96
+msgid "Add one ingredient per line. For structured format, use: Amount - Unit - Ingredient (e.g. 2 - tablespoons - olive oil)"
+msgstr "Voeg één ingrediënt per regel toe. Voor een gestructureerd formaat, gebruik: Hoeveelheid - Maateenheid - Ingrediënt (bijv. 2 - eetlepels - olijfolie)"
+
+#: includes/meta-boxes.php:117
+msgid "Instructions"
+msgstr "Bereidingswijze"
+
+#: includes/meta-boxes.php:118
+msgid "Add one step per line."
+msgstr "Voeg één stap per regel toe."
+
+#: includes/post-types.php:15
+msgctxt "Post type general name"
+msgid "Recipes"
+msgstr "Recepten"
+
+#: includes/post-types.php:16
+msgctxt "Post type singular name"
+msgid "Recipe"
+msgstr "Recept"
+
+#: includes/post-types.php:17
+msgctxt "Admin Menu text"
+msgid "Recipes"
+msgstr "Recepten"
+
+#: includes/post-types.php:18
+msgctxt "Add New on Toolbar"
+msgid "Recipe"
+msgstr "Recept"
+
+#: includes/post-types.php:19
+msgid "Add New"
+msgstr "Nieuwe toevoegen"
+
+#: includes/post-types.php:20
+msgid "Add New Recipe"
+msgstr "Nieuw recept toevoegen"
+
+#: includes/post-types.php:21
+msgid "New Recipe"
+msgstr "Nieuw recept"
+
+#: includes/post-types.php:22
+msgid "Edit Recipe"
+msgstr "Recept bewerken"
+
+#: includes/post-types.php:23
+msgid "View Recipe"
+msgstr "Recept bekijken"
+
+#: includes/post-types.php:24
+msgid "All Recipes"
+msgstr "Alle recepten"
+
+#: includes/post-types.php:25
+msgid "Search Recipes"
+msgstr "Recepten zoeken"
+
+#: includes/post-types.php:26
+msgid "Parent Recipes:"
+msgstr "Bovenliggende recepten:"
+
+#: includes/post-types.php:27
+msgid "No recipes found."
+msgstr "Geen recepten gevonden."
+
+#: includes/post-types.php:28
+msgid "No recipes found in Trash."
+msgstr "Geen recepten gevonden in de prullenbak."
+
+#: includes/post-types.php:29
+msgctxt "Overrides the \"Featured Image\" phrase"
+msgid "Recipe Cover Image"
+msgstr "Recept omslagafbeelding"
+
+#: includes/post-types.php:30
+msgctxt "Overrides the \"Set featured image\" phrase"
+msgid "Set cover image"
+msgstr "Omslagafbeelding instellen"
+
+#: includes/post-types.php:31
+msgctxt "Overrides the \"Remove featured image\" phrase"
+msgid "Remove cover image"
+msgstr "Omslagafbeelding verwijderen"
+
+#: includes/post-types.php:32
+msgctxt "Overrides the \"Use as featured image\" phrase"
+msgid "Use as cover image"
+msgstr "Gebruik als omslagafbeelding"
+
+#: includes/post-types.php:33
+msgctxt "The post type archive label used in nav menus"
+msgid "Recipe archives"
+msgstr "Recept archieven"
+
+#: includes/post-types.php:34
+msgctxt "Overrides the \"Insert into post\" phrase"
+msgid "Insert into recipe"
+msgstr "Invoegen in recept"
+
+#: includes/post-types.php:35
+msgctxt "Overrides the \"Uploaded to this post\" phrase"
+msgid "Uploaded to this recipe"
+msgstr "Geüpload naar dit recept"
+
+#: includes/post-types.php:36
+msgctxt "Screen reader text for the filter links"
+msgid "Filter recipes list"
+msgstr "Receptenlijst filteren"
+
+#: includes/post-types.php:37
+msgctxt "Screen reader text for the pagination"
+msgid "Recipes list navigation"
+msgstr "Receptenlijst navigatie"
+
+#: includes/post-types.php:38
+msgctxt "Screen reader text for the items list"
+msgid "Recipes list"
+msgstr "Receptenlijst"
