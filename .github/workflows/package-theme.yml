@@ -17,8 +17,9 @@ jobs:
       - name: Get theme version
         id: theme_version
         run: |
-          VERSION=$(grep -m 1 "Version:" masterchef/style.css | awk -F ': ' '{print $2}' | tr -d '\r')
+          VERSION=$(grep -m 1 "Version:" masterchef/style.css | awk -F': ' '{print $2}' | tr -d '\r')
           echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Theme version detected: $VERSION"
       
       - name: Package theme
         run: |

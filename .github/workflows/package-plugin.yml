@@ -17,8 +17,9 @@ jobs:
       - name: Get plugin version
         id: plugin_version
         run: |
-          VERSION=$(grep -m 1 "Version:" recipe-plugin/recipe-plugin.php | awk -F ': ' '{print $2}' | tr -d '\r')
+          VERSION=$(grep -m 1 " \* Version:" recipe-plugin/recipe-plugin.php | awk -F': ' '{print $2}' | tr -d '\r')
           echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Plugin version detected: $VERSION"
       
       - name: Package plugin
         run: |
