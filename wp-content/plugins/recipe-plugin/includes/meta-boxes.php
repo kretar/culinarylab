@@ -24,6 +24,15 @@ function recipe_plugin_add_meta_boxes() {
     );
 
     add_meta_box(
+        'recipe_source',
+        __('Recipe Source', 'recipe-plugin'),
+        'recipe_plugin_recipe_source_callback',
+        'recipe',
+        'normal',
+        'high'
+    );
+
+    add_meta_box(
         'recipe_ingredients',
         __('Recipe Ingredients', 'recipe-plugin'),
         'recipe_plugin_recipe_ingredients_callback',
@@ -91,6 +100,32 @@ function recipe_plugin_recipe_details_callback($post) {
                 <option value="medium" <?php selected($difficulty, 'medium'); ?>><?php echo esc_html($labels['medium']); ?></option>
                 <option value="hard" <?php selected($difficulty, 'hard'); ?>><?php echo esc_html($labels['hard']); ?></option>
             </select>
+        </p>
+    </div>
+    <?php
+}
+
+/**
+ * Render Recipe Source meta box
+ */
+function recipe_plugin_recipe_source_callback($post) {
+    $source = get_post_meta($post->ID, '_recipe_source', true);
+    $source_url = get_post_meta($post->ID, '_recipe_source_url', true);
+    $is_dutch = strpos(get_locale(), 'nl') !== false;
+    
+    $title = $is_dutch ? 'Bron' : 'Source';
+    $source_label = $is_dutch ? 'Naam van de bron (boek, website, etc.)' : 'Source name (book, website, etc.)';
+    $url_label = $is_dutch ? 'URL van de bron (indien van toepassing)' : 'Source URL (if applicable)';
+    ?>
+    <div class="recipe-source-meta">
+        <p>
+            <label for="recipe-source"><?php echo esc_html($source_label); ?>:</label><br>
+            <input type="text" id="recipe-source" name="recipe_source" value="<?php echo esc_attr($source); ?>" style="width: 100%;">
+        </p>
+        
+        <p>
+            <label for="recipe-source-url"><?php echo esc_html($url_label); ?>:</label><br>
+            <input type="url" id="recipe-source-url" name="recipe_source_url" value="<?php echo esc_attr($source_url); ?>" style="width: 100%;">
         </p>
     </div>
     <?php
@@ -178,6 +213,15 @@ function recipe_plugin_save_meta($post_id) {
     
     if (isset($_POST['recipe_difficulty'])) {
         update_post_meta($post_id, '_recipe_difficulty', sanitize_text_field($_POST['recipe_difficulty']));
+    }
+    
+    // Update recipe source information
+    if (isset($_POST['recipe_source'])) {
+        update_post_meta($post_id, '_recipe_source', sanitize_text_field($_POST['recipe_source']));
+    }
+    
+    if (isset($_POST['recipe_source_url'])) {
+        update_post_meta($post_id, '_recipe_source_url', esc_url_raw($_POST['recipe_source_url']));
     }
     
     // Update ingredients

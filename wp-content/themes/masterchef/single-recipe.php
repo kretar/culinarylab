@@ -55,6 +55,8 @@ get_header();
                             </div>
                         </div>
 
+                        <?php masterchef_recipe_source(); ?>
+                        
                         <?php masterchef_recipe_taxonomies(); ?>
                         
                     </div><!-- .recipe -->

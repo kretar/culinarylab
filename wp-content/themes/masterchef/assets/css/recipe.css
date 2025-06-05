@@ -547,6 +547,54 @@
     margin-bottom: 0;
 }
 
+.recipe-source {
+    margin-top: var(--spacing-xl);
+    padding: var(--spacing-md) var(--spacing-lg);
+    background-color: rgba(0,0,0,0.02);
+    border: 1px solid var(--border-color);
+    margin-bottom: var(--spacing-xl);
+    font-family: 'Roboto Mono', monospace;
+    font-size: 14px;
+    position: relative;
+}
+
+.recipe-source:before {
+    content: "REFERENCE DOCUMENTATION";
+    position: absolute;
+    top: -10px;
+    left: 15px;
+    background-color: var(--light-color);
+    padding: 0 8px;
+    font-size: 11px;
+    color: var(--secondary-color);
+    font-family: 'Roboto Mono', monospace;
+    letter-spacing: 0.5px;
+}
+
+.recipe-source-title {
+    color: var(--gray-color);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-right: var(--spacing-sm);
+}
+
+.recipe-source-name {
+    font-weight: 500;
+}
+
+.recipe-source-name a {
+    color: var(--secondary-color);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--border-color);
+    transition: all 0.2s;
+}
+
+.recipe-source-name a:hover {
+    color: var(--highlight-color);
+    border-bottom: 1px solid var(--highlight-color);
+}
+
 .recipe-tags {
     margin-top: var(--spacing-xl);
     padding-top: var(--spacing-lg);
@@ -1362,4 +1410,23 @@
 
 .comment-navigation a {
     color: var(--secondary-color);
+}
+
+/* Login Required Message */
+.comments-login-required {
+    padding: var(--spacing-lg);
+    background-color: rgba(0,0,0,0.02);
+    border: 1px dashed var(--border-color);
+    border-radius: var(--border-radius);
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.comments-login-required a {
+    color: var(--secondary-color);
+    font-weight: 500;
+}
+
+.comments-login-required a:hover {
+    color: var(--highlight-color);
 }

@@ -224,6 +224,33 @@ function masterchef_recipe_instructions() {
 }
 
 /**
+ * Display recipe source information
+ */
+function masterchef_recipe_source() {
+    $source = get_post_meta(get_the_ID(), '_recipe_source', true);
+    $source_url = get_post_meta(get_the_ID(), '_recipe_source_url', true);
+    
+    // Only display if we have a source
+    if (!empty($source)) {
+        $is_dutch = strpos(get_locale(), 'nl') !== false;
+        $source_title = $is_dutch ? __('Bron:', 'masterchef') : __('Source:', 'masterchef');
+        
+        ?>
+        <div class="recipe-source">
+            <span class="recipe-source-title"><?php echo $source_title; ?></span>
+            <?php if (!empty($source_url)) : ?>
+                <span class="recipe-source-name">
+                    <a href="<?php echo esc_url($source_url); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html($source); ?></a>
+                </span>
+            <?php else : ?>
+                <span class="recipe-source-name"><?php echo esc_html($source); ?></span>
+            <?php endif; ?>
+        </div>
+        <?php
+    }
+}
+
+/**
  * Display recipe taxonomies (categories and tags)
  */
 function masterchef_recipe_taxonomies() {
