@@ -30,7 +30,7 @@ jobs:
           zip -r ../culinarylab-${{ steps.theme_version.outputs.version }}.zip .
       
       - name: Upload theme package
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: culinarylab-theme-${{ steps.theme_version.outputs.version }}
           path: culinarylab-${{ steps.theme_version.outputs.version }}.zip
@@ -39,22 +39,12 @@ jobs:
       - name: Create Release
         if: github.event_name != 'pull_request'
         id: create_release
-        uses: actions/create-release@v1
+        uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: theme-v${{ steps.theme_version.outputs.version }}
-          release_name: CulinaryLab Theme v${{ steps.theme_version.outputs.version }}
+          name: CulinaryLab Theme v${{ steps.theme_version.outputs.version }}
           draft: false
           prerelease: false
-      
-      - name: Upload Release Asset
-        if: github.event_name != 'pull_request'
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./culinarylab-${{ steps.theme_version.outputs.version }}.zip
-          asset_name: culinarylab-${{ steps.theme_version.outputs.version }}.zip
-          asset_content_type: application/zip
+          files: culinarylab-${{ steps.theme_version.outputs.version }}.zip
