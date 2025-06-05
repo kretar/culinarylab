@@ -206,6 +206,23 @@ function masterchef_custom_post_classes($classes, $class, $post_id) {
 add_filter('post_class', 'masterchef_custom_post_classes', 10, 3);
 
 /**
+ * Require users to be logged in to comment
+ */
+function culinarylab_restrict_comments_to_members() {
+    // If the user is not logged in, disable comments
+    if (!is_user_logged_in()) {
+        // Close comments on the front-end
+        add_filter('comments_open', '__return_false', 20, 2);
+        add_filter('pings_open', '__return_false', 20, 2);
+        
+        // Hide existing comments
+        add_filter('comments_array', '__return_empty_array', 10, 2);
+    }
+}
+add_action('init', 'culinarylab_restrict_comments_to_members');
+
+
+/**
  * Register widget areas
  */
 function masterchef_widgets_init() {

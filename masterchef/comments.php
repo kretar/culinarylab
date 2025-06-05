@@ -84,6 +84,27 @@ $one_comment = $is_dutch ? '1 observatie' : '1 observation';
             <p class="scientific-note"><?php echo esc_html($no_comments_message); ?></p>
         </div>
     <?php endif; ?>
+    
+    <?php if (!comments_open() && !is_user_logged_in()) : ?>
+        <div class="comments-login-required">
+            <p class="scientific-note">
+                <?php 
+                $login_url = wp_login_url(get_permalink());
+                if ($is_dutch) {
+                    echo sprintf(
+                        'Je moet <a href="%s">ingelogd zijn</a> om observaties te documenteren.',
+                        esc_url($login_url)
+                    );
+                } else {
+                    echo sprintf(
+                        'You must be <a href="%s">logged in</a> to document observations.',
+                        esc_url($login_url)
+                    );
+                }
+                ?>
+            </p>
+        </div>
+    <?php endif; ?>
 
     <?php
     // Custom comment form

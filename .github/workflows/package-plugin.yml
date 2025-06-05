@@ -1,0 +1,59 @@
+name: Package Plugin
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'recipe-plugin/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Get plugin version
+        id: plugin_version
+        run: |
+          VERSION=$(grep -m 1 "Version:" recipe-plugin/recipe-plugin.php | awk -F ': ' '{print $2}' | tr -d '\r')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+      
+      - name: Package plugin
+        run: |
+          cd recipe-plugin
+          # Remove unnecessary development files
+          rm -rf .git .github .gitignore .DS_Store
+          # Create zip package
+          zip -r ../recipe-plugin-${{ steps.plugin_version.outputs.version }}.zip .
+      
+      - name: Upload plugin package
+        uses: actions/upload-artifact@v3
+        with:
+          name: recipe-plugin-${{ steps.plugin_version.outputs.version }}
+          path: recipe-plugin-${{ steps.plugin_version.outputs.version }}.zip
+          retention-days: 90
+      
+      - name: Create Release
+        if: github.event_name != 'pull_request'
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: plugin-v${{ steps.plugin_version.outputs.version }}
+          release_name: Recipe Plugin v${{ steps.plugin_version.outputs.version }}
+          draft: false
+          prerelease: false
+      
+      - name: Upload Release Asset
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./recipe-plugin-${{ steps.plugin_version.outputs.version }}.zip
+          asset_name: recipe-plugin-${{ steps.plugin_version.outputs.version }}.zip
+          asset_content_type: application/zip
