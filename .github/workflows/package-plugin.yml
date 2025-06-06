@@ -26,13 +26,13 @@ jobs:
           # Remove unnecessary development files
           rm -rf .git .github .gitignore .DS_Store
           # Create zip package
-          zip -r ../recipe-plugin-${{ steps.plugin_version.outputs.version }}.zip .
+          zip -r ../recipe-plugin.zip .
       
       - name: Upload plugin package
         uses: actions/upload-artifact@v4
         with:
-          name: recipe-plugin-${{ steps.plugin_version.outputs.version }}
-          path: recipe-plugin-${{ steps.plugin_version.outputs.version }}.zip
+          name: recipe-plugin
+          path: recipe-plugin.zip
           retention-days: 90
       
       - name: Create Release
@@ -45,4 +45,4 @@ jobs:
           name: Recipe Plugin v${{ steps.plugin_version.outputs.version }}
           draft: false
           prerelease: false
-          files: recipe-plugin-${{ steps.plugin_version.outputs.version }}.zip
+          files: recipe-plugin.zip

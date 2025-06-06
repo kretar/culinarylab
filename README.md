@@ -50,6 +50,34 @@ A scientific laboratory approach to culinary arts inspired by molecular gastrono
    - Navigate to Plugins → Add New → Upload Plugin
    - Upload and activate the `recipe-plugin-x.x.x.zip` file
 
+#### Installing Upgrades
+
+1. Download the latest release .zip files from the [Releases page](https://github.com/kretar/culinarylab/releases)
+2. Before upgrading, make a complete backup of your site (files and database)
+3. For the theme:
+   - In WordPress admin, navigate to Appearance → Themes → Add New → Upload Theme
+   - Upload the new `culinarylab-x.x.x.zip` file (WordPress will update the existing theme)
+   - The theme update will be applied automatically
+
+4. For the plugin (safest method that preserves your recipe data):
+   - Use FTP or your hosting file manager to access your WordPress installation
+   - Navigate to `/wp-content/plugins/`
+   - Rename the existing `recipe-plugin` folder to `recipe-plugin-old` (this preserves your data while preventing conflicts)
+   - In WordPress admin, go to Plugins → Add New → Upload Plugin
+   - Upload the new `recipe-plugin-x.x.x.zip` file
+   - Activate the newly uploaded plugin
+   - Verify all recipes are intact with their data
+   - If everything works correctly, you can delete the `recipe-plugin-old` folder
+
+5. Alternative plugin update method (for advanced users):
+   - Make sure you have a complete database backup
+   - Deactivate the Recipe Plugin in WordPress admin
+   - Install a plugin like "WP Reset" that can manage plugin deactivation without data loss
+   - Delete the plugin files through WordPress
+   - Upload and activate the new version
+   
+6. Verify that all recipes display correctly after the upgrade
+
 ## 🧪 Using the Theme
 
 ### Creating Recipes
