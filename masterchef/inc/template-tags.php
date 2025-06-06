@@ -119,9 +119,14 @@ function masterchef_post_thumbnail($size = 'post-thumbnail') {
  * Displays pagination for archive pages
  */
 function masterchef_pagination() {
+    // Set direction labels based on language
+    $is_dutch = strpos(get_locale(), 'nl') !== false;
+    $previous_label = $is_dutch ? __('Vorige', 'masterchef') : __('Previous', 'masterchef');
+    $next_label = $is_dutch ? __('Volgende', 'masterchef') : __('Next', 'masterchef');
+    
     $args = array(
-        'prev_text' => '<span class="nav-prev-text">' . __('Previous', 'masterchef') . '</span>',
-        'next_text' => '<span class="nav-next-text">' . __('Next', 'masterchef') . '</span>',
+        'prev_text' => '<span class="nav-prev-text">' . $previous_label . '</span>',
+        'next_text' => '<span class="nav-next-text">' . $next_label . '</span>',
     );
 
     the_posts_pagination($args);
@@ -138,9 +143,15 @@ function masterchef_post_navigation() {
         return;
     }
 
+    // Set direction labels based on language
+    $is_dutch = strpos(get_locale(), 'nl') !== false;
+    $previous_label = $is_dutch ? __('Vorige', 'masterchef') : __('Previous', 'masterchef');
+    $next_label = $is_dutch ? __('Volgende', 'masterchef') : __('Next', 'masterchef');
+    $post_navigation_label = $is_dutch ? __('Receptnavigatie', 'masterchef') : __('Recipe navigation', 'masterchef');
+
     ?>
     <nav class="post-navigation">
-        <h2 class="screen-reader-text"><?php _e('Post navigation', 'masterchef'); ?></h2>
+        <h2 class="screen-reader-text"><?php echo esc_html($post_navigation_label); ?></h2>
         <div class="post-nav-links">
             <?php if ($previous) : ?>
                 <div class="nav-previous">
@@ -150,7 +161,7 @@ function masterchef_post_navigation() {
                         <?php endif; ?>
                         <div class="nav-text">
                             <span class="nav-title"><?php echo esc_html(get_the_title($previous)); ?></span>
-                            <span class="nav-direction"><?php _e('Previous', 'masterchef'); ?></span>
+                            <span class="nav-direction"><?php echo esc_html($previous_label); ?></span>
                         </div>
                     </a>
                 </div>
@@ -164,7 +175,7 @@ function masterchef_post_navigation() {
                         <?php endif; ?>
                         <div class="nav-text">
                             <span class="nav-title"><?php echo esc_html(get_the_title($next)); ?></span>
-                            <span class="nav-direction"><?php _e('Next', 'masterchef'); ?></span>
+                            <span class="nav-direction"><?php echo esc_html($next_label); ?></span>
                         </div>
                     </a>
                 </div>
