@@ -112,7 +112,7 @@
 
 .recipe-instructions li {
     counter-increment: recipe-steps;
-    padding: 10px 0 10px 40px;
+    padding: 0 0 10px 40px;
     position: relative;
     margin-bottom: 10px;
 }
