@@ -461,6 +461,8 @@
     font-family: 'Roboto', sans-serif;
     display: flex;
     align-items: baseline;
+    cursor: pointer;
+    transition: color 0.2s ease;
 }
 
 .recipe-ingredients li:last-child {
@@ -468,12 +470,33 @@
 }
 
 .recipe-ingredients li:before {
-    content: "⊛";
-    color: var(--secondary-color);
+    content: "";
     position: absolute;
     left: 0;
-    font-size: 14px;
-    opacity: 0.8;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    border: 1.5px solid var(--secondary-color);
+    border-radius: 3px;
+    background-color: rgba(255,255,255,0.8);
+    cursor: pointer;
+}
+
+.recipe-ingredients li.checked:before {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.recipe-ingredients li.checked:after {
+    content: "✓";
+    position: absolute;
+    left: 3px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
 }
 
 /* Quantities in mono */
@@ -483,6 +506,16 @@
     font-variant-numeric: tabular-nums;
     margin-right: 5px;
     color: var(--primary-color);
+}
+
+.recipe-ingredients li.checked {
+    color: var(--gray-color);
+    text-decoration: line-through;
+    opacity: 0.8;
+}
+
+.recipe-ingredients li.checked .recipe-ingredient-quantity {
+    color: var(--gray-color);
 }
 
 /* Instructions - Protocol Steps */
@@ -536,7 +569,7 @@
     content: "";
     position: absolute;
     left: -48px;
-    top: 8px;
+    top: 14px;
     width: 12px;
     height: 2px;
     background-color: var(--border-color);
@@ -934,9 +967,9 @@
     .recipe-section-title {
         font-size: 20px;
     }
-    
-    .recipe {
-        padding: var(--spacing-md);
+
+    .recipe, .experiment {
+        padding: var(--spacing-sm);
     }
     
     .recipe:before {
@@ -950,14 +983,17 @@
     .recipe-tags:before {
         font-size: 10px;
     }
-    
+
+    .recipe-instructions li {
+        padding: 0 0 10px 20px;
+    }
     .recipe-instructions li:before {
         left: -30px;
         font-size: 12px;
     }
     
     .recipe-instructions li:after {
-        left: -38px;
+        left: -48px;
         width: 10px;
     }
 }
