@@ -2,6 +2,11 @@
 
 All notable changes to the Master Chef WordPress theme project will be documented in this file.
 
+## 1.1.1 - 2025-06-06
+
+### Changed
+- Updated GitHub Actions workflows to run only on version tag pushes
+
 ## 1.1.0 - 2025-06-06
 
 ### Added

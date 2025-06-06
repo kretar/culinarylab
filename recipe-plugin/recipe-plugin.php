@@ -3,7 +3,7 @@
  * Plugin Name: Recipe Plugin
  * Plugin URI: 
  * Description: A custom plugin to manage recipes for the Master Chef WordPress site
- * Version: 1.1.0
+ * Version: 1.1.1
  * Author: 
  * Author URI: 
  * Text Domain: recipe-plugin
