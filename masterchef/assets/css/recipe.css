@@ -633,21 +633,11 @@
     border-bottom: 1px dotted var(--secondary-color);
     transition: all 0.2s ease;
     font-weight: 500;
-    padding-left: 18px;
-    position: relative;
 }
 
 .recipe-instructions li a:hover {
     color: var(--highlight-color);
     border-bottom: 1px solid var(--highlight-color);
-}
-
-.recipe-instructions li a:before {
-    content: "▶";
-    font-size: 10px;
-    position: absolute;
-    left: 0;
-    top: 2px;
 }
 
 .recipe-source {
