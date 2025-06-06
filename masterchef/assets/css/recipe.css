@@ -1001,7 +1001,7 @@
 /* Print Styles - Laboratory Documentation Export */
 @media print {
     /* Hide non-essential elements when printing */
-    header, footer, .recipe-print-button, .recipe-comments, .site-header, .site-footer, .sidebar, .navigation {
+    header, footer, .recipe-print-button, .recipe-comments, .site-header, .site-footer, .sidebar, .navigation, .comments-area, .scientific-form, #comments {
         display: none !important;
     }
     
