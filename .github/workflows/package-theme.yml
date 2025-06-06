@@ -2,9 +2,8 @@ name: Package Theme
 
 on:
   push:
-    branches: [ main ]
-    paths:
-      - 'masterchef/**'
+    tags:
+      - 'v*.*.*'
   workflow_dispatch:
 
 jobs:
@@ -37,13 +36,12 @@ jobs:
           retention-days: 90
       
       - name: Create Release
-        if: github.event_name != 'pull_request'
         id: create_release
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: theme-v${{ steps.theme_version.outputs.version }}
+          tag_name: ${{ github.ref_name }}
           name: CulinaryLab Theme v${{ steps.theme_version.outputs.version }}
           draft: false
           prerelease: false

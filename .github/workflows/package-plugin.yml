@@ -2,9 +2,8 @@ name: Package Plugin
 
 on:
   push:
-    branches: [ main ]
-    paths:
-      - 'recipe-plugin/**'
+    tags:
+      - 'v*.*.*'
   workflow_dispatch:
 
 jobs:
@@ -37,13 +36,12 @@ jobs:
           retention-days: 90
       
       - name: Create Release
-        if: github.event_name != 'pull_request'
         id: create_release
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: plugin-v${{ steps.plugin_version.outputs.version }}
+          tag_name: ${{ github.ref_name }}
           name: Recipe Plugin v${{ steps.plugin_version.outputs.version }}
           draft: false
           prerelease: false
