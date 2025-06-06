@@ -175,10 +175,14 @@ function recipe_plugin_recipe_instructions_callback($post) {
         <p>
             <label for="recipe-instructions"><?php echo esc_html($label); ?>:</label><br>
             <small><?php echo wp_kses($description, array()); ?></small><br>
-            <textarea id="recipe-instructions" name="recipe_instructions" rows="10" style="width: 100%;"><?php echo esc_textarea($instructions); ?></textarea>
+            <textarea id="recipe-instructions" name="recipe_instructions" rows="10" style="width: 100%;"><?php echo $instructions; // Not using esc_textarea to preserve HTML ?></textarea>
         </p>
         <p>
-            <small><?php _e('Example: Mix the ingredients together. <a href="https://example.com/video" target="_blank">Watch the video</a> for demonstration.', 'recipe-plugin'); ?></small>
+            <small>
+                <?php _e('Example: Mix the ingredients together. <a href="https://example.com/video" target="_blank">Watch the video</a> for demonstration.', 'recipe-plugin'); ?>
+                <br>
+                <?php _e('HTML code example: Mix the ingredients together. &lt;a href="https://example.com/video" target="_blank"&gt;Watch the video&lt;/a&gt; for demonstration.', 'recipe-plugin'); ?>
+            </small>
         </p>
     </div>
     <?php
@@ -235,7 +239,7 @@ function recipe_plugin_recipe_sections_callback($post) {
                         <h5><?php echo esc_html($instructions_label); ?>:</h5>
                         <p>
                             <textarea name="recipe_sections[<?php echo esc_attr($section_count); ?>][instructions]" 
-                                     rows="5" style="width: 100%;"><?php echo esc_textarea($section_instructions); ?></textarea>
+                                     rows="5" style="width: 100%;"><?php echo $section_instructions; // Not using esc_textarea to preserve HTML ?></textarea>
                         </p>
                         
                         <p>
@@ -381,9 +385,24 @@ function recipe_plugin_save_meta($post_id) {
         update_post_meta($post_id, '_recipe_ingredients', sanitize_textarea_field($_POST['recipe_ingredients']));
     }
     
-    // Update instructions
+    // Update instructions - allowing specific HTML tags
     if (isset($_POST['recipe_instructions'])) {
-        update_post_meta($post_id, '_recipe_instructions', sanitize_textarea_field($_POST['recipe_instructions']));
+        // Use wp_kses to allow specific HTML tags instead of sanitize_textarea_field
+        $allowed_html = array(
+            'a' => array(
+                'href' => array(),
+                'title' => array(),
+                'target' => array(),
+                'rel' => array(),
+                'class' => array()
+            ),
+            'em' => array(),
+            'strong' => array(),
+            'span' => array(
+                'class' => array()
+            )
+        );
+        update_post_meta($post_id, '_recipe_instructions', wp_kses($_POST['recipe_instructions'], $allowed_html));
     }
     
     // Update recipe sections
@@ -395,7 +414,7 @@ function recipe_plugin_save_meta($post_id) {
                 $sections[] = array(
                     'title' => sanitize_text_field($section['title']),
                     'ingredients' => sanitize_textarea_field($section['ingredients']),
-                    'instructions' => sanitize_textarea_field($section['instructions']),
+                    'instructions' => wp_kses($section['instructions'], $allowed_html),
                 );
             }
         }
