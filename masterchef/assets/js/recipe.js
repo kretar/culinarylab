@@ -9,6 +9,7 @@
         initServingsAdjustment();
         initPrintButton();
         initTimers();
+        initIngredientCheckboxes();
     });
 
     /**
@@ -169,6 +170,16 @@
                 });
             }
         }
+    }
+    
+    /**
+     * Initialize ingredient checkboxes for shopping list functionality
+     */
+    function initIngredientCheckboxes() {
+        // Toggle checked state when clicking on ingredient items
+        $('.recipe-ingredients li').on('click', function() {
+            $(this).toggleClass('checked');
+        });
     }
 
 })(jQuery);
