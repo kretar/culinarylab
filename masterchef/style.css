@@ -68,7 +68,11 @@ a:hover {
     margin: 0 auto;
     padding: 0 var(--spacing-lg);
 }
-
+@media (max-width: 768px) {
+    .container {
+        padding: 0 var(--spacing-md);
+    }
+}
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Space Mono', 'Roboto', sans-serif;
     font-weight: 500;
