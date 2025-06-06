@@ -1,0 +1,58 @@
+name: Deploy via SFTP
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Download theme artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: package-theme.yml
+          name: culinarylab-theme
+          path: ./artifacts/theme
+          
+      - name: Download plugin artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: package-plugin.yml
+          name: recipe-plugin
+          path: ./artifacts/plugin
+      
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SFTP_KEY }}
+          known_hosts: ${{ secrets.SFTP_KNOWN_HOSTS }}
+          if_key_exists: fail
+          
+      - name: Deploy Theme via SFTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.SFTP_SERVER }}
+          username: ${{ secrets.SFTP_USERNAME }}
+          protocol: sftp
+          port: 22
+          private-key: ${{ secrets.SFTP_KEY }}
+          local-dir: ./artifacts/theme/
+          server-dir: ${{ secrets.SERVER_BASEDIR }}themes/
+          dangerous-clean-slate: false
+          
+      - name: Deploy Plugin via SFTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.SFTP_SERVER }}
+          username: ${{ secrets.SFTP_USERNAME }}
+          protocol: sftp
+          port: 22
+          private-key: ${{ secrets.SFTP_KEY }}
+          local-dir: ./artifacts/plugin/
+          server-dir: ${{ secrets.SERVER_BASEDIR }}plugins/
+          dangerous-clean-slate: false
