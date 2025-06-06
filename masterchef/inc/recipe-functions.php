@@ -224,6 +224,86 @@ function masterchef_recipe_instructions() {
 }
 
 /**
+ * Display recipe sections (for recipes with multiple parts)
+ */
+function masterchef_recipe_sections() {
+    $recipe_sections = get_post_meta(get_the_ID(), '_recipe_sections', true);
+    
+    if (is_array($recipe_sections) && !empty($recipe_sections)) {
+        $is_dutch = strpos(get_locale(), 'nl') !== false;
+        
+        ?>
+        <div class="recipe-sections">
+            <?php foreach ($recipe_sections as $index => $section) : 
+                $section_title = isset($section['title']) ? $section['title'] : '';
+                $section_ingredients = isset($section['ingredients']) ? $section['ingredients'] : '';
+                $section_instructions = isset($section['instructions']) ? $section['instructions'] : '';
+                
+                if (!empty($section_title)) :
+                ?>
+                <div class="recipe-section" id="recipe-section-<?php echo esc_attr($index); ?>">
+                    <h3 class="recipe-section-title"><?php echo esc_html($section_title); ?></h3>
+                    
+                    <?php if (!empty($section_ingredients)) : ?>
+                        <div class="recipe-section-ingredients recipe-ingredients">
+                            <h4 class="recipe-ingredients-title">
+                                <?php echo $is_dutch ? __('Ingrediënten', 'masterchef') : __('Ingredients', 'masterchef'); ?>
+                            </h4>
+                            <ul>
+                                <?php
+                                $ingredients_array = explode("\n", $section_ingredients);
+                                
+                                foreach ($ingredients_array as $ingredient) {
+                                    $ingredient = trim($ingredient);
+                                    
+                                    if (!empty($ingredient)) {
+                                        $parts = explode('-', $ingredient);
+                                        
+                                        if (count($parts) >= 3) {
+                                            $amount = trim($parts[0]);
+                                            $unit = trim($parts[1]);
+                                            $name = trim(implode('-', array_slice($parts, 2)));
+                                            
+                                            echo '<li><span class="recipe-ingredient-quantity" data-original-amount="' . esc_attr($amount) . '">' . esc_html($amount) . '</span> ' . esc_html($unit) . ' ' . esc_html($name) . '</li>';
+                                        } else {
+                                            echo '<li>' . esc_html($ingredient) . '</li>';
+                                        }
+                                    }
+                                }
+                                ?>
+                            </ul>
+                        </div>
+                    <?php endif; ?>
+                    
+                    <?php if (!empty($section_instructions)) : ?>
+                        <div class="recipe-section-instructions recipe-instructions">
+                            <h4 class="recipe-instructions-title">
+                                <?php echo $is_dutch ? __('Bereidingswijze', 'masterchef') : __('Instructions', 'masterchef'); ?>
+                            </h4>
+                            <ol>
+                                <?php
+                                $instructions_array = explode("\n", $section_instructions);
+                                
+                                foreach ($instructions_array as $instruction) {
+                                    $instruction = trim($instruction);
+                                    
+                                    if (!empty($instruction)) {
+                                        echo '<li>' . esc_html($instruction) . '</li>';
+                                    }
+                                }
+                                ?>
+                            </ol>
+                        </div>
+                    <?php endif; ?>
+                </div>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </div>
+        <?php
+    }
+}
+
+/**
  * Display recipe source information
  */
 function masterchef_recipe_source() {

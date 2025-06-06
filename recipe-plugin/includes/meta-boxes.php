@@ -49,6 +49,15 @@ function recipe_plugin_add_meta_boxes() {
         'normal',
         'high'
     );
+    
+    add_meta_box(
+        'recipe_sections',
+        __('Recipe Sections', 'recipe-plugin'),
+        'recipe_plugin_recipe_sections_callback',
+        'recipe',
+        'normal',
+        'high'
+    );
 }
 add_action('add_meta_boxes', 'recipe_plugin_add_meta_boxes');
 
@@ -173,6 +182,143 @@ function recipe_plugin_recipe_instructions_callback($post) {
 }
 
 /**
+ * Render Recipe Sections meta box
+ */
+function recipe_plugin_recipe_sections_callback($post) {
+    $recipe_sections = get_post_meta($post->ID, '_recipe_sections', true);
+    $is_dutch = strpos(get_locale(), 'nl') !== false;
+    
+    $title_label = $is_dutch ? 'Secties' : 'Sections';
+    $description = $is_dutch ? 'Voeg aparte secties toe aan je recept (bijv. voor bodem, vulling, topping).' : 
+                              'Add separate sections to your recipe (e.g., for base, filling, topping).';
+    $section_title_label = $is_dutch ? 'Sectie titel' : 'Section title';
+    $ingredients_label = $is_dutch ? 'Ingrediënten' : 'Ingredients';
+    $instructions_label = $is_dutch ? 'Bereidingswijze' : 'Instructions';
+    $add_section_button = $is_dutch ? 'Sectie toevoegen' : 'Add Section';
+    
+    // Initialize sections array if it doesn't exist
+    if (!is_array($recipe_sections)) {
+        $recipe_sections = array();
+    }
+    ?>
+    <div class="recipe-sections-meta">
+        <p>
+            <label><?php echo esc_html($title_label); ?>:</label><br>
+            <small><?php echo esc_html($description); ?></small>
+        </p>
+        
+        <div id="recipe-sections-container">
+            <?php 
+            if (!empty($recipe_sections)) {
+                $section_count = 0;
+                foreach ($recipe_sections as $section) {
+                    $section_title = isset($section['title']) ? $section['title'] : '';
+                    $section_ingredients = isset($section['ingredients']) ? $section['ingredients'] : '';
+                    $section_instructions = isset($section['instructions']) ? $section['instructions'] : '';
+                    ?>
+                    <div class="recipe-section" data-index="<?php echo esc_attr($section_count); ?>">
+                        <h4><?php echo esc_html($section_title_label); ?> <span class="section-number"><?php echo esc_html($section_count + 1); ?></span></h4>
+                        <p>
+                            <input type="text" name="recipe_sections[<?php echo esc_attr($section_count); ?>][title]" 
+                                  value="<?php echo esc_attr($section_title); ?>" style="width: 100%;">
+                        </p>
+                        
+                        <h5><?php echo esc_html($ingredients_label); ?>:</h5>
+                        <p>
+                            <textarea name="recipe_sections[<?php echo esc_attr($section_count); ?>][ingredients]" 
+                                     rows="5" style="width: 100%;"><?php echo esc_textarea($section_ingredients); ?></textarea>
+                        </p>
+                        
+                        <h5><?php echo esc_html($instructions_label); ?>:</h5>
+                        <p>
+                            <textarea name="recipe_sections[<?php echo esc_attr($section_count); ?>][instructions]" 
+                                     rows="5" style="width: 100%;"><?php echo esc_textarea($section_instructions); ?></textarea>
+                        </p>
+                        
+                        <p>
+                            <button type="button" class="button remove-section"><?php _e('Remove', 'recipe-plugin'); ?></button>
+                        </p>
+                        <hr>
+                    </div>
+                    <?php
+                    $section_count++;
+                }
+            }
+            ?>
+        </div>
+        
+        <p>
+            <button type="button" id="add-recipe-section" class="button button-secondary"><?php echo esc_html($add_section_button); ?></button>
+        </p>
+    </div>
+    
+    <script>
+    jQuery(document).ready(function($) {
+        // Template for new section
+        var sectionTemplate = `
+            <div class="recipe-section" data-index="{index}">
+                <h4><?php echo esc_html($section_title_label); ?> <span class="section-number">{number}</span></h4>
+                <p>
+                    <input type="text" name="recipe_sections[{index}][title]" value="" style="width: 100%;">
+                </p>
+                
+                <h5><?php echo esc_html($ingredients_label); ?>:</h5>
+                <p>
+                    <textarea name="recipe_sections[{index}][ingredients]" rows="5" style="width: 100%;"></textarea>
+                </p>
+                
+                <h5><?php echo esc_html($instructions_label); ?>:</h5>
+                <p>
+                    <textarea name="recipe_sections[{index}][instructions]" rows="5" style="width: 100%;"></textarea>
+                </p>
+                
+                <p>
+                    <button type="button" class="button remove-section"><?php _e('Remove', 'recipe-plugin'); ?></button>
+                </p>
+                <hr>
+            </div>
+        `;
+        
+        // Add new section
+        $('#add-recipe-section').on('click', function() {
+            var container = $('#recipe-sections-container');
+            var sections = container.find('.recipe-section');
+            var index = sections.length;
+            var newSection = sectionTemplate
+                .replace(/{index}/g, index)
+                .replace(/{number}/g, index + 1);
+                
+            container.append(newSection);
+            updateSectionNumbers();
+        });
+        
+        // Remove section
+        $(document).on('click', '.remove-section', function() {
+            $(this).closest('.recipe-section').remove();
+            updateSectionNumbers();
+        });
+        
+        // Update section numbers
+        function updateSectionNumbers() {
+            $('.recipe-section').each(function(index) {
+                var newIndex = index;
+                $(this).attr('data-index', newIndex);
+                $(this).find('.section-number').text(newIndex + 1);
+                
+                // Update input names
+                $(this).find('input, textarea').each(function() {
+                    var name = $(this).attr('name');
+                    name = name.replace(/recipe_sections\[\d+\]/, 'recipe_sections[' + newIndex + ']');
+                    $(this).attr('name', name);
+                });
+            });
+        }
+    });
+    </script>
+    <?php
+}
+
+/**
  * Save recipe meta box data
  */
 function recipe_plugin_save_meta($post_id) {
@@ -232,6 +378,25 @@ function recipe_plugin_save_meta($post_id) {
     // Update instructions
     if (isset($_POST['recipe_instructions'])) {
         update_post_meta($post_id, '_recipe_instructions', sanitize_textarea_field($_POST['recipe_instructions']));
+    }
+    
+    // Update recipe sections
+    if (isset($_POST['recipe_sections']) && is_array($_POST['recipe_sections'])) {
+        $sections = array();
+        
+        foreach ($_POST['recipe_sections'] as $section) {
+            if (!empty($section['title'])) {
+                $sections[] = array(
+                    'title' => sanitize_text_field($section['title']),
+                    'ingredients' => sanitize_textarea_field($section['ingredients']),
+                    'instructions' => sanitize_textarea_field($section['instructions']),
+                );
+            }
+        }
+        
+        update_post_meta($post_id, '_recipe_sections', $sections);
+    } else {
+        delete_post_meta($post_id, '_recipe_sections');
     }
 }
 add_action('save_post', 'recipe_plugin_save_meta');

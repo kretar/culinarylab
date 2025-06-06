@@ -45,15 +45,28 @@ get_header();
                             <?php the_content(); ?>
                         </div>
 
-                        <div class="recipe-sections">
-                            <div class="recipe-section recipe-ingredients-section">
-                                <?php masterchef_recipe_ingredients(); ?>
-                            </div>
+                        <?php
+                        // Check if we have recipe sections
+                        $recipe_sections = get_post_meta(get_the_ID(), '_recipe_sections', true);
+                        
+                        if (is_array($recipe_sections) && !empty($recipe_sections)) {
+                            // Display recipe sections (ingredients and instructions by section)
+                            masterchef_recipe_sections();
+                        } else {
+                            // Display traditional recipe format
+                            ?>
+                            <div class="recipe-components">
+                                <div class="recipe-component recipe-ingredients-component">
+                                    <?php masterchef_recipe_ingredients(); ?>
+                                </div>
 
-                            <div class="recipe-section recipe-instructions-section">
-                                <?php masterchef_recipe_instructions(); ?>
+                                <div class="recipe-component recipe-instructions-component">
+                                    <?php masterchef_recipe_instructions(); ?>
+                                </div>
                             </div>
-                        </div>
+                            <?php
+                        }
+                        ?>
 
                         <?php masterchef_recipe_source(); ?>
                         
