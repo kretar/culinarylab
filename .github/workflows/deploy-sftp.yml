@@ -16,14 +16,14 @@ jobs:
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: package-theme.yml
-          name: culinarylab-theme
+          name: culinarylab-1.1.2.zip
           path: ./artifacts/theme
           
       - name: Download plugin artifact
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: package-plugin.yml
-          name: recipe-plugin
+          name: recipe-plugin-1.1.2.zip
           path: ./artifacts/plugin
       
       - name: Install SSH key
