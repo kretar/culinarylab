@@ -564,7 +564,7 @@
     color: var(--gray-color);
 }
 
-/* Instructions - Protocol Steps */
+/* Instructions - Protocol Steps with Video Links */
 .recipe-instructions {
     position: relative;
     border-left: 2px solid var(--border-color);
@@ -624,6 +624,30 @@
 .recipe-instructions li:last-child {
     border-bottom: none;
     margin-bottom: 0;
+}
+
+/* Video link styling */
+.recipe-instructions li a {
+    color: var(--secondary-color);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--secondary-color);
+    transition: all 0.2s ease;
+    font-weight: 500;
+    padding-left: 18px;
+    position: relative;
+}
+
+.recipe-instructions li a:hover {
+    color: var(--highlight-color);
+    border-bottom: 1px solid var(--highlight-color);
+}
+
+.recipe-instructions li a:before {
+    content: "▶";
+    font-size: 10px;
+    position: absolute;
+    left: 0;
+    top: 2px;
 }
 
 .recipe-source {

@@ -169,13 +169,16 @@ function recipe_plugin_recipe_instructions_callback($post) {
     $is_dutch = strpos(get_locale(), 'nl') !== false;
     
     $label = $is_dutch ? 'Bereidingswijze' : 'Instructions';
-    $description = $is_dutch ? 'Voeg één stap per regel toe.' : 'Add one step per line.';
+    $description = $is_dutch ? 'Voeg één stap per regel toe. HTML-links worden ondersteund.' : 'Add one step per line. HTML links are supported.';
     ?>
     <div class="recipe-instructions-meta">
         <p>
             <label for="recipe-instructions"><?php echo esc_html($label); ?>:</label><br>
-            <small><?php echo esc_html($description); ?></small><br>
+            <small><?php echo wp_kses($description, array()); ?></small><br>
             <textarea id="recipe-instructions" name="recipe_instructions" rows="10" style="width: 100%;"><?php echo esc_textarea($instructions); ?></textarea>
+        </p>
+        <p>
+            <small><?php _e('Example: Mix the ingredients together. <a href="https://example.com/video" target="_blank">Watch the video</a> for demonstration.', 'recipe-plugin'); ?></small>
         </p>
     </div>
     <?php
@@ -270,6 +273,9 @@ function recipe_plugin_recipe_sections_callback($post) {
                 <h5><?php echo esc_html($instructions_label); ?>:</h5>
                 <p>
                     <textarea name="recipe_sections[{index}][instructions]" rows="5" style="width: 100%;"></textarea>
+                </p>
+                <p>
+                    <small><?php _e('HTML links are supported. Example: &lt;a href="https://example.com/video" target="_blank"&gt;Watch video&lt;/a&gt;', 'recipe-plugin'); ?></small>
                 </p>
                 
                 <p>

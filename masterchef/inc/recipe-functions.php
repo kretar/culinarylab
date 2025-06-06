@@ -192,7 +192,7 @@ function masterchef_recipe_ingredients() {
 }
 
 /**
- * Display recipe instructions
+ * Display recipe instructions with support for HTML links
  */
 function masterchef_recipe_instructions() {
     $instructions = get_post_meta(get_the_ID(), '_recipe_instructions', true);
@@ -213,7 +213,21 @@ function masterchef_recipe_instructions() {
                     $instruction = trim($instruction);
                     
                     if (!empty($instruction)) {
-                        echo '<li>' . esc_html($instruction) . '</li>';
+                        // Process instruction - allow safe HTML like links
+                        echo '<li>' . wp_kses($instruction, array(
+                            'a' => array(
+                                'href' => array(),
+                                'title' => array(),
+                                'target' => array(),
+                                'rel' => array(),
+                                'class' => array()
+                            ),
+                            'em' => array(),
+                            'strong' => array(),
+                            'span' => array(
+                                'class' => array()
+                            )
+                        )) . '</li>';
                     }
                 }
                 ?>
@@ -288,7 +302,21 @@ function masterchef_recipe_sections() {
                                     $instruction = trim($instruction);
                                     
                                     if (!empty($instruction)) {
-                                        echo '<li>' . esc_html($instruction) . '</li>';
+                                        // Process instruction - allow safe HTML like links
+                                        echo '<li>' . wp_kses($instruction, array(
+                                            'a' => array(
+                                                'href' => array(),
+                                                'title' => array(),
+                                                'target' => array(),
+                                                'rel' => array(),
+                                                'class' => array()
+                                            ),
+                                            'em' => array(),
+                                            'strong' => array(),
+                                            'span' => array(
+                                                'class' => array()
+                                            )
+                                        )) . '</li>';
                                     }
                                 }
                                 ?>
