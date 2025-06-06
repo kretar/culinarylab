@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
 /**
  * Define constants
  */
-define('MASTERCHEF_VERSION', '1.1.1');
+define('MASTERCHEF_VERSION', '1.1.2');
 define('MASTERCHEF_DIR', get_template_directory());
 define('MASTERCHEF_URI', get_template_directory_uri());
 

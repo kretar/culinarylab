@@ -2,6 +2,16 @@
 
 All notable changes to the Master Chef WordPress theme project will be documented in this file.
 
+## 1.1.2 - 2025-06-06
+
+### Added
+- Support for HTML links in recipe instructions to link to demonstration videos 
+
+### Fixed
+- Issue with storing HTML links in recipe instructions
+- Localization for navigation links on recipe pages
+- Improved link styling in recipe instructions (removed icon for cleaner appearance)
+
 ## 1.1.1 - 2025-06-06
 
 ### Changed
