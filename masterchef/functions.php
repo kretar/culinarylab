@@ -30,6 +30,55 @@ function masterchef_disable_block_editor_styles() {
 add_action('wp_print_styles', 'masterchef_disable_block_editor_styles', 100);
 
 /**
+ * Force all WordPress styles and scripts to be loaded from files (no inline)
+ */
+function masterchef_force_file_includes() {
+    // Only enforce on frontend
+    if (!is_admin()) {
+        // Create a filter to force scripts to be loaded from files, not inline
+        add_filter('script_loader_tag', function($tag, $handle) {
+            // Look for scripts with inline data attached
+            if (strpos($tag, 'data-') !== false || strpos($tag, 'type="text/template"') !== false) {
+                // Extract script URL
+                preg_match('/src=["\']([^"\']+)["\']/', $tag, $matches);
+                if (isset($matches[1])) {
+                    // Rewrite tag to only include src attribute
+                    $tag = '<script src="' . esc_url($matches[1]) . '"></script>';
+                }
+            }
+            return $tag;
+        }, 999, 2);
+        
+        // Create a filter to prevent inline styles
+        add_filter('style_loader_tag', function($tag, $handle) {
+            // Remove inline CSS
+            if (strpos($tag, 'data-') !== false || strpos($tag, '<style') !== false) {
+                // Extract style URL
+                preg_match('/href=["\']([^"\']+)["\']/', $tag, $matches);
+                if (isset($matches[1])) {
+                    // Rewrite tag to only include href attribute
+                    $tag = '<link rel="stylesheet" href="' . esc_url($matches[1]) . '" />';
+                }
+            }
+            return $tag;
+        }, 999, 2);
+
+        // Disable WordPress emoji scripts (these insert inline content)
+        remove_action('wp_head', 'print_emoji_detection_script', 7);
+        remove_action('wp_print_styles', 'print_emoji_styles');
+        remove_action('admin_print_styles', 'print_emoji_styles');
+        remove_action('admin_print_scripts', 'print_emoji_detection_script');
+        
+        // Remove inline scripts added by WordPress
+        remove_action('wp_head', 'wp_print_scripts');
+        remove_action('wp_head', 'wp_print_head_scripts', 9);
+        add_action('wp_footer', 'wp_print_scripts', 5);
+        add_action('wp_footer', 'wp_print_head_scripts', 5);
+    }
+}
+add_action('wp_loaded', 'masterchef_force_file_includes');
+
+/**
  * Sets up theme defaults and registers support for various WordPress features.
  */
 function masterchef_setup() {
@@ -79,6 +128,44 @@ function masterchef_setup() {
 add_action('after_setup_theme', 'masterchef_setup');
 
 /**
+ * Add a function to convert inline styles to external files
+ */
+function masterchef_inline_to_files() {
+    global $wp_styles;
+    
+    // Only run on frontend
+    if (is_admin() || !is_object($wp_styles)) {
+        return;
+    }
+    
+    // Process all registered styles
+    foreach ($wp_styles->registered as $handle => $style) {
+        // Check for inline styles
+        if (!empty($wp_styles->registered[$handle]->extra['after'])) {
+            $inline_css = implode("\n", $wp_styles->registered[$handle]->extra['after']);
+            
+            // Create a directory for extracted styles if it doesn't exist
+            $css_dir = MASTERCHEF_DIR . '/assets/css/extracted';
+            if (!file_exists($css_dir)) {
+                wp_mkdir_p($css_dir);
+            }
+            
+            // Generate a filename based on the handle
+            $filename = sanitize_file_name('inline-' . $handle . '-' . substr(md5($inline_css), 0, 8) . '.css');
+            $filepath = $css_dir . '/' . $filename;
+            
+            // Write the CSS to file
+            file_put_contents($filepath, $inline_css);
+            
+            // Enqueue the extracted file and clear inline CSS
+            wp_enqueue_style($handle . '-extracted', MASTERCHEF_URI . '/assets/css/extracted/' . $filename, array($handle), filemtime($filepath));
+            $wp_styles->registered[$handle]->extra['after'] = array();
+        }
+    }
+}
+add_action('wp_head', 'masterchef_inline_to_files', 1);
+
+/**
  * Add Content Security Policy
  */
 function masterchef_add_csp_headers() {
@@ -87,7 +174,7 @@ function masterchef_add_csp_headers() {
         return;
     }
     
-    // Define CSP policy
+    // Define CSP policy - IMPORTANT: removed 'unsafe-inline' since we're now enforcing file includes
     $csp = "default-src 'self'; " .
            "script-src 'self' https://fonts.googleapis.com https://ajax.googleapis.com; " .
            "style-src 'self' https://fonts.googleapis.com; " .
@@ -100,12 +187,11 @@ function masterchef_add_csp_headers() {
            "frame-ancestors 'none'; " .
            "form-action 'self';";
     
-    // For initial testing, use report-only mode
-    // After testing, switch to enforcing mode by uncommenting the line below
+    // Apply CSP in enforcement mode
     header("Content-Security-Policy: " . $csp);
     
     // Report-only mode (doesn't block anything, just reports violations)
-//    header("Content-Security-Policy-Report-Only: " . $csp . " report-uri https://culinarylab.kretar.com/csp-report/");
+    // header("Content-Security-Policy-Report-Only: " . $csp . " report-uri https://culinarylab.kretar.com/csp-report/");
 }
 add_action('send_headers', 'masterchef_add_csp_headers');
 
@@ -161,7 +247,7 @@ function masterchef_scripts() {
     
     // Google Fonts for scientific theme
     wp_enqueue_style('masterchef-fonts', 'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600&family=Space+Mono:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap', array(), null);
-    wp_style_add_data( 'masterchef-fonts', array( 'integrity', 'crossorigin' ) , array( 'sha384-TFgY1SAfh8eTAQ96pgQTbUA/JG9p70GIjqDAAnVDqxF4df3GvQXj/0Xf7hvYXyWk', 'anonymous' ) );
+    // Removed integrity attribute to comply with no-inline policy
 
     // JavaScript files
     wp_enqueue_script('masterchef-navigation', MASTERCHEF_URI . '/assets/js/navigation.js', array(), MASTERCHEF_VERSION, true);
@@ -179,11 +265,24 @@ function masterchef_scripts() {
         wp_enqueue_script('comment-reply');
     }
     
-    // Add nonce for frontend AJAX requests
-    wp_localize_script('masterchef-navigation', 'masterchef_vars', array(
+    // Add nonce for frontend AJAX requests - save to a custom JS file instead of inline
+    $nonce_data = 'var masterchef_vars = ' . json_encode(array(
         'ajaxurl' => admin_url('admin-ajax.php'),
         'nonce' => wp_create_nonce('masterchef_nonce')
-    ));
+    )) . ';';
+    
+    // Create the directory if it doesn't exist
+    $nonce_dir = MASTERCHEF_DIR . '/assets/js/generated';
+    if (!file_exists($nonce_dir)) {
+        wp_mkdir_p($nonce_dir);
+    }
+    
+    // Write to a file (will be regenerated on page load)
+    $nonce_file = $nonce_dir . '/nonce.js';
+    file_put_contents($nonce_file, $nonce_data);
+    
+    // Enqueue the generated file
+    wp_enqueue_script('masterchef-vars', MASTERCHEF_URI . '/assets/js/generated/nonce.js', array(), time(), true);
 }
 add_action('wp_enqueue_scripts', 'masterchef_scripts');
 
