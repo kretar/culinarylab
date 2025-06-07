@@ -205,14 +205,18 @@ function masterchef_add_csp_headers() {
         return;
     }
     
-    // Define CSP policy - IMPORTANT: removed 'unsafe-inline' since we're now enforcing file includes
-    $csp = "default-src 'self'; " .
+    // Define CSP policy with default-src 'none' for maximum security
+    // This means we must explicitly allow ALL resource types
+    $csp = "default-src 'none'; " .
            "script-src 'self' https://fonts.googleapis.com https://ajax.googleapis.com; " .
            "style-src 'self' https://fonts.googleapis.com; " .
            "font-src 'self' data: https://fonts.gstatic.com; " .
            "img-src 'self' data: https:; " .
            "connect-src 'self'; " .
            "frame-src 'self'; " .
+           "manifest-src 'self'; " .
+           "media-src 'self'; " .
+           "worker-src 'self'; " .
            "object-src 'none'; " .
            "base-uri 'self'; " .
            "frame-ancestors 'none'; " .
