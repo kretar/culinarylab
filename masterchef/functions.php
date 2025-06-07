@@ -180,16 +180,21 @@ function masterchef_inline_to_files() {
 add_action('wp_head', 'masterchef_inline_to_files', 1);
 
 /**
- * Directly remove speculationrules script
+ * Remove speculationrules and other inline scripts/styles
  */
-function masterchef_remove_speculationrules() {
+function masterchef_clean_head_output() {
     // Remove directly from the output buffer
     ob_start(function($output) {
         // Remove speculationrules JSON scripts from head
-        return preg_replace('/<script type="speculationrules">.*?<\/script>/s', '', $output);
+        $output = preg_replace('/<script type="speculationrules">.*?<\/script>/s', '', $output);
+        
+        // Remove ALL inline style tags - this is more aggressive but ensures all inline styles are gone
+        $output = preg_replace('/<style\b[^>]*>(.*?)<\/style>/s', '', $output);
+        
+        return $output;
     });
 }
-add_action('wp_head', 'masterchef_remove_speculationrules', 0);
+add_action('wp_head', 'masterchef_clean_head_output', 0);
 
 /**
  * Add Content Security Policy
