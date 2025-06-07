@@ -15,9 +15,23 @@ define('MASTERCHEF_DIR', get_template_directory());
 define('MASTERCHEF_URI', get_template_directory_uri());
 
 /**
+ * Disable Gutenberg block editor global inline styles
+ */
+function masterchef_disable_block_editor_styles() {
+    // Disable global styles for the block editor
+    wp_deregister_style('wp-block-library'); 
+    wp_deregister_style('wp-block-library-theme');
+    wp_deregister_style('wc-block-style');
+}
+add_action('wp_print_styles', 'masterchef_disable_block_editor_styles', 100);
+
+/**
  * Sets up theme defaults and registers support for various WordPress features.
  */
 function masterchef_setup() {
+    // Disable WordPress 5.9+ global styles and SVGs
+    remove_action('wp_enqueue_scripts', 'wp_enqueue_global_styles');
+    remove_action('wp_body_open', 'wp_global_styles_render_svg_filters');
     // Add default posts and comments RSS feed links to head.
     add_theme_support('automatic-feed-links');
 
@@ -33,8 +47,8 @@ function masterchef_setup() {
     // Add support for wide and full-width blocks
     add_theme_support('align-wide');
 
-    // Add support for core block styles
-    add_theme_support('wp-block-styles');
+    // Remove support for core block styles
+    remove_theme_support('wp-block-styles');
 
     // Register menu locations
     register_nav_menus(
@@ -71,8 +85,8 @@ function masterchef_add_csp_headers() {
     
     // Define CSP policy
     $csp = "default-src 'self'; " .
-           "script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://ajax.googleapis.com; " .
-           "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " .
+           "script-src 'self' https://fonts.googleapis.com https://ajax.googleapis.com; " .
+           "style-src 'self' https://fonts.googleapis.com; " .
            "font-src 'self' data: https://fonts.gstatic.com; " .
            "img-src 'self' data: https:; " .
            "connect-src 'self'; " .
@@ -101,6 +115,21 @@ function masterchef_add_secure_header() {
     header( 'X-Frame-Options: SAMEORIGIN' );
 }
 add_action( 'send_headers', 'masterchef_add_secure_header' );
+
+/**
+ * Remove global styles and SVG filters
+ */
+function masterchef_remove_global_styles() {
+    // Remove global styles
+    wp_dequeue_style('global-styles');
+    wp_dequeue_style('wp-block-library');
+    wp_dequeue_style('wp-block-library-theme');
+    
+    // Remove the SVG and global styles filter from wp_head
+    remove_action('wp_enqueue_scripts', 'wp_enqueue_global_styles');
+    remove_action('wp_body_open', 'wp_global_styles_render_svg_filters');
+}
+add_action('wp_enqueue_scripts', 'masterchef_remove_global_styles', 100);
 
 /**
  * Enqueue scripts and styles.
