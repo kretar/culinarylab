@@ -61,6 +61,47 @@ function masterchef_setup() {
 add_action('after_setup_theme', 'masterchef_setup');
 
 /**
+ * Add Content Security Policy
+ */
+function masterchef_add_csp_headers() {
+    // Only apply CSP to frontend, not admin pages
+    if (is_admin()) {
+        return;
+    }
+    
+    // Define CSP policy
+    $csp = "default-src 'self'; " .
+           "script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://ajax.googleapis.com; " .
+           "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " .
+           "font-src 'self' data: https://fonts.gstatic.com; " .
+           "img-src 'self' data: https:; " .
+           "connect-src 'self'; " .
+           "frame-src 'self'; " .
+           "object-src 'none'; " .
+           "base-uri 'self'; " .
+           "form-action 'self';";
+    
+    // For initial testing, use report-only mode
+    // After testing, switch to enforcing mode by uncommenting the line below
+    // header("Content-Security-Policy: " . $csp);
+    
+    // Report-only mode (doesn't block anything, just reports violations)
+    header("Content-Security-Policy-Report-Only: " . $csp . " report-uri https://culinarylab.kretar.com/csp-report/");
+}
+add_action('send_headers', 'masterchef_add_csp_headers');
+
+/**
+ * Enables the HTTP Strict Transport Security (HSTS) header
+ */
+function masterchef_add_secure_header() {
+    header( 'Strict-Transport-Security: max-age=31536000' );
+    header( 'Referrer-Policy: same-origin' );
+    header( 'X-Content-Type-Options: nosniff' );
+    header( 'X-Frame-Options: SAMEORIGIN' );
+}
+add_action( 'send_headers', 'masterchef_add_secure_header' );
+
+/**
  * Enqueue scripts and styles.
  */
 function masterchef_scripts() {
