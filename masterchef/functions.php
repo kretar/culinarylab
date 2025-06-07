@@ -62,12 +62,23 @@ function masterchef_force_file_includes() {
             }
             return $tag;
         }, 999, 2);
+        
+        // Filter out speculationrules completely
+        add_filter('wp_resource_hints', function($hints, $relation_type) {
+            if ($relation_type === 'speculationrules') {
+                return array(); // Return empty array to prevent speculative loading
+            }
+            return $hints;
+        }, 10, 2);
 
         // Disable WordPress emoji scripts (these insert inline content)
         remove_action('wp_head', 'print_emoji_detection_script', 7);
         remove_action('wp_print_styles', 'print_emoji_styles');
         remove_action('admin_print_styles', 'print_emoji_styles');
         remove_action('admin_print_scripts', 'print_emoji_detection_script');
+        
+        // Remove speculation rules script
+        remove_action('wp_head', 'wp_add_speculation_rules_tag');
         
         // Remove inline scripts added by WordPress
         remove_action('wp_head', 'wp_print_scripts');
@@ -85,6 +96,9 @@ function masterchef_setup() {
     // Disable WordPress 5.9+ global styles and SVGs
     remove_action('wp_enqueue_scripts', 'wp_enqueue_global_styles');
     remove_action('wp_body_open', 'wp_global_styles_render_svg_filters');
+    
+    // Remove speculationrules added in WordPress 6.4+
+    remove_action('wp_head', 'wp_add_speculation_rules_tag');
     // Add default posts and comments RSS feed links to head.
     add_theme_support('automatic-feed-links');
 
@@ -164,6 +178,18 @@ function masterchef_inline_to_files() {
     }
 }
 add_action('wp_head', 'masterchef_inline_to_files', 1);
+
+/**
+ * Directly remove speculationrules script
+ */
+function masterchef_remove_speculationrules() {
+    // Remove directly from the output buffer
+    ob_start(function($output) {
+        // Remove speculationrules JSON scripts from head
+        return preg_replace('/<script type="speculationrules">.*?<\/script>/s', '', $output);
+    });
+}
+add_action('wp_head', 'masterchef_remove_speculationrules', 0);
 
 /**
  * Add Content Security Policy
