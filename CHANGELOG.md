@@ -2,6 +2,24 @@
 
 All notable changes to the Master Chef WordPress theme project will be documented in this file.
 
+## 1.1.4 - 2025-06-07
+
+### Added
+- Content Security Policy (CSP) implementation for improved security
+- Additional security headers: HSTS, Referrer-Policy, X-Content-Type-Options, X-Frame-Options
+- Support for nonces in AJAX requests
+- External resource management for better CSP compliance
+
+### Changed
+- Converted inline styles to external CSS classes
+- Extracted inline data URIs to external files
+- Improved admin interface styling for the recipe plugin
+
+## 1.1.3 - 2025-06-07
+
+### Added
+- Initial Content Security Policy (CSP) implementation in report-only mode
+
 ## 1.1.2 - 2025-06-06
 
 ### Added

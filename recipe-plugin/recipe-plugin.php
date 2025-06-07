@@ -3,7 +3,7 @@
  * Plugin Name: Recipe Plugin
  * Plugin URI: 
  * Description: A custom plugin to manage recipes for the Master Chef WordPress site
- * Version: 1.1.2
+ * Version: 1.1.4
  * Author: 
  * Author URI: 
  * Text Domain: recipe-plugin
@@ -18,7 +18,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Plugin constants
-define('RECIPE_PLUGIN_VERSION', '1.0.0');
+define('RECIPE_PLUGIN_VERSION', '1.1.4');
 define('RECIPE_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('RECIPE_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('RECIPE_PLUGIN_BASENAME', plugin_basename(__FILE__));
