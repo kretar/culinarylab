@@ -162,6 +162,16 @@
     width: 150px;
 }
 
+/* Additional styles for CSP compatibility */
+.widefat {
+    width: 100%;
+}
+
+textarea.widefat {
+    width: 100%;
+    box-sizing: border-box;
+}
+
 @media (max-width: 768px) {
     .recipe-meta {
         flex-direction: column;

@@ -79,14 +79,15 @@ function masterchef_add_csp_headers() {
            "frame-src 'self'; " .
            "object-src 'none'; " .
            "base-uri 'self'; " .
+           "frame-ancestors 'none'; " .
            "form-action 'self';";
     
     // For initial testing, use report-only mode
     // After testing, switch to enforcing mode by uncommenting the line below
-    // header("Content-Security-Policy: " . $csp);
+    header("Content-Security-Policy: " . $csp);
     
     // Report-only mode (doesn't block anything, just reports violations)
-    header("Content-Security-Policy-Report-Only: " . $csp . " report-uri https://culinarylab.kretar.com/csp-report/");
+//    header("Content-Security-Policy-Report-Only: " . $csp . " report-uri https://culinarylab.kretar.com/csp-report/");
 }
 add_action('send_headers', 'masterchef_add_csp_headers');
 
@@ -123,9 +124,13 @@ function masterchef_scripts() {
     
     // Google Fonts for scientific theme
     wp_enqueue_style('masterchef-fonts', 'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600&family=Space+Mono:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap', array(), null);
-    
+    wp_style_add_data( 'masterchef-fonts', array( 'integrity', 'crossorigin' ) , array( 'sha384-TFgY1SAfh8eTAQ96pgQTbUA/JG9p70GIjqDAAnVDqxF4df3GvQXj/0Xf7hvYXyWk', 'anonymous' ) );
+
     // JavaScript files
     wp_enqueue_script('masterchef-navigation', MASTERCHEF_URI . '/assets/js/navigation.js', array(), MASTERCHEF_VERSION, true);
+    
+    // Sound resources
+    wp_enqueue_script('masterchef-sounds', MASTERCHEF_URI . '/assets/js/sounds.js', array(), MASTERCHEF_VERSION, true);
     
     // Recipe specific script
     if (is_singular('recipe')) {
@@ -136,6 +141,12 @@ function masterchef_scripts() {
     if (is_singular() && comments_open() && get_option('thread_comments')) {
         wp_enqueue_script('comment-reply');
     }
+    
+    // Add nonce for frontend AJAX requests
+    wp_localize_script('masterchef-navigation', 'masterchef_vars', array(
+        'ajaxurl' => admin_url('admin-ajax.php'),
+        'nonce' => wp_create_nonce('masterchef_nonce')
+    ));
 }
 add_action('wp_enqueue_scripts', 'masterchef_scripts');
 

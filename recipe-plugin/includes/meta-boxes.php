@@ -129,12 +129,12 @@ function recipe_plugin_recipe_source_callback($post) {
     <div class="recipe-source-meta">
         <p>
             <label for="recipe-source"><?php echo esc_html($source_label); ?>:</label><br>
-            <input type="text" id="recipe-source" name="recipe_source" value="<?php echo esc_attr($source); ?>" style="width: 100%;">
+            <input type="text" id="recipe-source" name="recipe_source" value="<?php echo esc_attr($source); ?>" class="widefat">
         </p>
         
         <p>
             <label for="recipe-source-url"><?php echo esc_html($url_label); ?>:</label><br>
-            <input type="url" id="recipe-source-url" name="recipe_source_url" value="<?php echo esc_attr($source_url); ?>" style="width: 100%;">
+            <input type="url" id="recipe-source-url" name="recipe_source_url" value="<?php echo esc_attr($source_url); ?>" class="widefat">
         </p>
     </div>
     <?php
@@ -155,7 +155,7 @@ function recipe_plugin_recipe_ingredients_callback($post) {
         <p>
             <label for="recipe-ingredients"><?php echo esc_html($label); ?>:</label><br>
             <small><?php echo esc_html($description); ?></small><br>
-            <textarea id="recipe-ingredients" name="recipe_ingredients" rows="10" style="width: 100%;"><?php echo esc_textarea($ingredients); ?></textarea>
+            <textarea id="recipe-ingredients" name="recipe_ingredients" rows="10" class="widefat"><?php echo esc_textarea($ingredients); ?></textarea>
         </p>
     </div>
     <?php
@@ -175,7 +175,7 @@ function recipe_plugin_recipe_instructions_callback($post) {
         <p>
             <label for="recipe-instructions"><?php echo esc_html($label); ?>:</label><br>
             <small><?php echo wp_kses($description, array()); ?></small><br>
-            <textarea id="recipe-instructions" name="recipe_instructions" rows="10" style="width: 100%;"><?php echo $instructions; // Not using esc_textarea to preserve HTML ?></textarea>
+            <textarea id="recipe-instructions" name="recipe_instructions" rows="10" class="widefat"><?php echo $instructions; // Not using esc_textarea to preserve HTML ?></textarea>
         </p>
         <p>
             <small>
@@ -227,19 +227,19 @@ function recipe_plugin_recipe_sections_callback($post) {
                         <h4><?php echo esc_html($section_title_label); ?> <span class="section-number"><?php echo esc_html($section_count + 1); ?></span></h4>
                         <p>
                             <input type="text" name="recipe_sections[<?php echo esc_attr($section_count); ?>][title]" 
-                                  value="<?php echo esc_attr($section_title); ?>" style="width: 100%;">
+                                  value="<?php echo esc_attr($section_title); ?>" class="widefat">
                         </p>
                         
                         <h5><?php echo esc_html($ingredients_label); ?>:</h5>
                         <p>
                             <textarea name="recipe_sections[<?php echo esc_attr($section_count); ?>][ingredients]" 
-                                     rows="5" style="width: 100%;"><?php echo esc_textarea($section_ingredients); ?></textarea>
+                                     rows="5" class="widefat"><?php echo esc_textarea($section_ingredients); ?></textarea>
                         </p>
                         
                         <h5><?php echo esc_html($instructions_label); ?>:</h5>
                         <p>
                             <textarea name="recipe_sections[<?php echo esc_attr($section_count); ?>][instructions]" 
-                                     rows="5" style="width: 100%;"><?php echo $section_instructions; // Not using esc_textarea to preserve HTML ?></textarea>
+                                     rows="5" class="widefat"><?php echo $section_instructions; // Not using esc_textarea to preserve HTML ?></textarea>
                         </p>
                         
                         <p>
@@ -266,17 +266,17 @@ function recipe_plugin_recipe_sections_callback($post) {
             <div class="recipe-section" data-index="{index}">
                 <h4><?php echo esc_html($section_title_label); ?> <span class="section-number">{number}</span></h4>
                 <p>
-                    <input type="text" name="recipe_sections[{index}][title]" value="" style="width: 100%;">
+                    <input type="text" name="recipe_sections[{index}][title]" value="" class="widefat">
                 </p>
                 
                 <h5><?php echo esc_html($ingredients_label); ?>:</h5>
                 <p>
-                    <textarea name="recipe_sections[{index}][ingredients]" rows="5" style="width: 100%;"></textarea>
+                    <textarea name="recipe_sections[{index}][ingredients]" rows="5" class="widefat"></textarea>
                 </p>
                 
                 <h5><?php echo esc_html($instructions_label); ?>:</h5>
                 <p>
-                    <textarea name="recipe_sections[{index}][instructions]" rows="5" style="width: 100%;"></textarea>
+                    <textarea name="recipe_sections[{index}][instructions]" rows="5" class="widefat"></textarea>
                 </p>
                 <p>
                     <small><?php _e('HTML links are supported. Example: &lt;a href="https://example.com/video" target="_blank"&gt;Watch video&lt;/a&gt;', 'recipe-plugin'); ?></small>
