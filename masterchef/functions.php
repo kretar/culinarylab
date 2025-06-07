@@ -18,10 +18,14 @@ define('MASTERCHEF_URI', get_template_directory_uri());
  * Disable Gutenberg block editor global inline styles
  */
 function masterchef_disable_block_editor_styles() {
-    // Disable global styles for the block editor
-    wp_deregister_style('wp-block-library'); 
-    wp_deregister_style('wp-block-library-theme');
-    wp_deregister_style('wc-block-style');
+    // Only run on frontend, not in admin
+    if (!is_admin()) {
+        // Disable global styles for the block editor
+        wp_deregister_style('wp-block-library'); 
+        wp_deregister_style('wp-block-library-theme');
+        wp_deregister_style('classic-theme-styles'); // Remove WordPress classic theme styles
+        wp_deregister_style('wc-block-style');
+    }
 }
 add_action('wp_print_styles', 'masterchef_disable_block_editor_styles', 100);
 
@@ -120,14 +124,18 @@ add_action( 'send_headers', 'masterchef_add_secure_header' );
  * Remove global styles and SVG filters
  */
 function masterchef_remove_global_styles() {
-    // Remove global styles
-    wp_dequeue_style('global-styles');
-    wp_dequeue_style('wp-block-library');
-    wp_dequeue_style('wp-block-library-theme');
-    
-    // Remove the SVG and global styles filter from wp_head
-    remove_action('wp_enqueue_scripts', 'wp_enqueue_global_styles');
-    remove_action('wp_body_open', 'wp_global_styles_render_svg_filters');
+    // Only run on frontend, not in admin
+    if (!is_admin()) {
+        // Remove global styles
+        wp_dequeue_style('global-styles');
+        wp_dequeue_style('wp-block-library');
+        wp_dequeue_style('wp-block-library-theme');
+        wp_dequeue_style('classic-theme-styles'); // Remove WordPress classic theme styles
+        
+        // Remove the SVG and global styles filter from wp_head
+        remove_action('wp_enqueue_scripts', 'wp_enqueue_global_styles');
+        remove_action('wp_body_open', 'wp_global_styles_render_svg_filters');
+    }
 }
 add_action('wp_enqueue_scripts', 'masterchef_remove_global_styles', 100);
 
