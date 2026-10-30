@@ -25,6 +25,7 @@ services:
       - "8080:80"
     restart: always
     volumes:
+      - wp_data:/var/www/html
       - ./masterchef:/var/www/html/wp-content/themes/masterchef
       - ./recipe-plugin:/var/www/html/wp-content/plugins/recipe-plugin
     environment:
@@ -34,5 +35,27 @@ services:
       WORDPRESS_DB_NAME: wordpress
       WORDPRESS_DEBUG: 1
 
+  # One-shot provisioning: installs WordPress, activates theme/plugin, adds sample content.
+  # Re-runs on every `docker-compose up` and skips what is already done.
+  setup:
+    depends_on:
+      - wordpress
+    image: wordpress:cli
+    user: "33:33"  # same uid as www-data in the wordpress image
+    restart: "no"
+    entrypoint: ["sh", "/setup.sh"]
+    volumes:
+      - wp_data:/var/www/html
+      - ./masterchef:/var/www/html/wp-content/themes/masterchef
+      - ./recipe-plugin:/var/www/html/wp-content/plugins/recipe-plugin
+      - ./docker/setup.sh:/setup.sh:ro
+    environment:
+      HOME: /tmp
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+
 volumes:
   db_data: {}
+  wp_data: {}
