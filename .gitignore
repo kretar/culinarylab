@@ -4,3 +4,6 @@
 # Written at runtime by the theme (see functions.php)
 masterchef/assets/css/extracted/
 masterchef/assets/js/generated/
+
+# Local working notes
+TASKS.md
