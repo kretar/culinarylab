@@ -26,8 +26,8 @@
                 <div class="site-info">
                     <?php
                     $is_dutch = strpos(get_locale(), 'nl') !== false;
-                    $copyright = $is_dutch ? '© %s Master Chef. Alle rechten voorbehouden.' : '© %s Master Chef. All rights reserved.';
-                    printf(esc_html($copyright), date('Y'));
+                    $copyright = $is_dutch ? '© %s %s. Alle rechten voorbehouden.' : '© %s %s. All rights reserved.';
+                    printf(esc_html($copyright), date('Y'), esc_html(get_bloginfo('name')));
                     ?>
                 </div><!-- .site-info -->
 

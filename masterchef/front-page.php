@@ -95,30 +95,34 @@ get_header();
     </div>
 
     <div class="main-content">
+        <?php
+        // Only show the articles section when there are posts and a posts page to link to
+        $posts_page_id = (int) get_option('page_for_posts');
+        $latest_posts = new WP_Query(array(
+            'post_type' => 'post',
+            'posts_per_page' => 6
+        ));
+
+        if ($posts_page_id && $latest_posts->have_posts()) :
+        ?>
         <div id="primary" class="content-area">
             <main id="main" class="site-main">
                 <div class="section-header">
                     <h2 class="section-title"><?php echo $is_dutch ? __('Laatste artikelen', 'masterchef') : __('Latest Articles', 'masterchef'); ?></h2>
-                    <a href="<?php echo esc_url(get_permalink(get_option('page_for_posts'))); ?>" class="view-all"><?php echo $is_dutch ? __('Alle Artikelen', 'masterchef') : __('All Articles', 'masterchef'); ?> →</a>
+                    <a href="<?php echo esc_url(get_permalink($posts_page_id)); ?>" class="view-all"><?php echo $is_dutch ? __('Alle Artikelen', 'masterchef') : __('All Articles', 'masterchef'); ?> →</a>
                 </div>
 
                 <div class="posts-grid">
                     <?php
-                    $latest_posts = new WP_Query(array(
-                        'post_type' => 'post',
-                        'posts_per_page' => 6
-                    ));
-
-                    if ($latest_posts->have_posts()) :
-                        while ($latest_posts->have_posts()) : $latest_posts->the_post();
-                            get_template_part('template-parts/content', 'card');
-                        endwhile;
-                        wp_reset_postdata();
-                    endif;
+                    while ($latest_posts->have_posts()) : $latest_posts->the_post();
+                        get_template_part('template-parts/content', 'card');
+                    endwhile;
+                    wp_reset_postdata();
                     ?>
                 </div>
             </main><!-- #main -->
         </div><!-- #primary -->
+        <?php endif; ?>
 
         <!-- Categories Section -->
         <div class="recipe-categories-section">
