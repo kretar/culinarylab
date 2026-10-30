@@ -44,6 +44,9 @@ if ! wp core is-installed >/dev/null 2>&1; then
         --admin_password="$ADMIN_PASSWORD" \
         --admin_email="$ADMIN_EMAIL" \
         --skip-email
+    # Remove the default "Hello world!" post, "Sample Page" and first comment
+    wp post delete 1 2 --force >/dev/null 2>&1 || true
+    wp comment delete 1 --force >/dev/null 2>&1 || true
 fi
 
 wp option update blogdescription "Ontdek culinaire experimenten met een wetenschappelijke benadering" >/dev/null
@@ -93,7 +96,7 @@ if [ "$(wp post list --post_type=recipe --post_status=any --format=count)" = "0"
 fi
 
 # Sample blog content, so the homepage articles section and posts page can be tested
-if [ "$(wp post list --post_type=post --post_status=any --format=count)" = "0" ]; then
+if [ "$(wp option get page_for_posts)" = "0" ]; then
     echo "Creating sample blog content..."
     home_id=$(wp post create --porcelain --post_type=page --post_status=publish --post_title="Home")
     blog_id=$(wp post create --porcelain --post_type=page --post_status=publish --post_title="Blog")
