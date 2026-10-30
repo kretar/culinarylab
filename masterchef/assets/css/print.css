@@ -1,0 +1,266 @@
+/**
+ * Master Chef - Print styles for single recipes
+ *
+ * Enqueued with media="print" after recipe.css (see masterchef_scripts()), so these
+ * rules override the screen and the max-width: 768px rules, which also match an A4 page.
+ */
+
+@page {
+    margin: 1.5cm;
+}
+
+/* Hide everything that is not part of the recipe itself */
+.skip-link,
+.site-header,
+.site-footer,
+.sidebar,
+.recipe-print-button,
+.recipe-controls,
+.recipe-header-scientific,
+.post-navigation,
+.comments-area,
+.recipe-comments,
+#comments {
+    display: none !important;
+}
+
+body {
+    background: none;
+    color: #000;
+    font-family: 'Roboto', sans-serif;
+    font-size: 11pt;
+    line-height: 1.45;
+}
+
+.container {
+    max-width: none;
+    padding: 0;
+}
+
+/* Flatten the screen "laboratory" decoration (.experiment is added by post_class) */
+.recipe,
+.experiment {
+    background: none;
+    border: none;
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+}
+
+.recipe:before,
+.experiment:before,
+h1:after,
+.recipe-title:after,
+.recipe-meta:before,
+.recipe-meta-item:after,
+.recipe-description:before,
+.recipe-ingredients:before,
+.recipe-instructions:before,
+.recipe-instructions li:after,
+.recipe-tags:before,
+.recipe-featured-image:before,
+.recipe-sections .recipe-section:before {
+    display: none !important;
+}
+
+/* Header: compact title with a small cover image next to the details */
+.recipe-header {
+    margin: 0 0 8pt;
+    text-align: left;
+}
+
+.recipe-title {
+    border-bottom: 1pt solid #000;
+    color: #000;
+    font-size: 20pt;
+    margin: 0 0 8pt;
+    padding-bottom: 4pt;
+}
+
+.recipe-featured-image {
+    border-radius: 0;
+    box-shadow: none;
+    float: right;
+    margin: 0 0 8pt 14pt;
+    text-align: left;
+    width: 6cm;
+}
+
+.recipe-featured-image img {
+    display: block;
+    height: 4.5cm;
+    object-fit: cover;
+    width: 100%;
+}
+
+/* Meta: one compact row of label/value pairs, no icons */
+.recipe-meta {
+    background: none;
+    border: none;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4pt 18pt;
+    margin: 0 0 8pt;
+    padding: 0;
+}
+
+.recipe-meta-item {
+    flex: 0 0 auto;
+    margin: 0;
+    min-width: 0;
+    padding: 0;
+    text-align: left;
+}
+
+.recipe-meta-item-icon {
+    display: none;
+}
+
+.recipe-meta-item-label {
+    color: #555;
+    font-size: 8pt;
+    margin: 0;
+}
+
+.recipe-meta-item-value {
+    font-size: 10pt;
+    font-weight: bold;
+}
+
+.recipe-description {
+    font-size: 11pt;
+    margin: 0 0 10pt;
+    max-width: none;
+    padding: 0;
+}
+
+/* Ingredients and instructions start below the floated cover image */
+.recipe-components,
+.recipe-sections {
+    clear: both;
+    margin: 0;
+}
+
+.recipe-component {
+    margin: 0;
+}
+
+.recipe-sections .recipe-section {
+    background: none;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    margin: 0 0 12pt;
+    padding: 0;
+}
+
+.recipe-section-title {
+    border-bottom: 1pt solid #000;
+    font-size: 15pt;
+    margin: 0 0 6pt;
+    padding: 0 0 3pt;
+}
+
+.recipe-ingredients,
+.recipe-instructions {
+    background: none;
+    border: none;
+    margin: 0 0 10pt;
+    padding: 0;
+}
+
+.recipe-ingredients-title,
+.recipe-instructions-title {
+    border-bottom: 1pt solid #ddd;
+    break-after: avoid;
+    color: #000;
+    display: block;
+    font-size: 13pt;
+    margin: 0 0 6pt;
+    padding-bottom: 3pt;
+}
+
+/* Ingredients: keep the left padding from recipe.css for the empty tick box */
+.recipe-ingredients li {
+    border-bottom: 0.5pt dotted #bbb;
+    break-inside: avoid;
+    cursor: auto;
+    padding-bottom: 3pt;
+    padding-top: 3pt;
+}
+
+.recipe-ingredients li:before {
+    background: none;
+    border: 1pt solid #000;
+    border-radius: 2pt;
+    height: 9pt;
+    width: 9pt;
+}
+
+/* Print a blank list, whatever was ticked on screen */
+.recipe-ingredients li.checked {
+    color: #000;
+    opacity: 1;
+    text-decoration: none;
+}
+
+.recipe-ingredients li.checked:before {
+    background: none;
+}
+
+.recipe-ingredients li.checked:after {
+    display: none;
+}
+
+.recipe-ingredient-quantity,
+.recipe-ingredients li.checked .recipe-ingredient-quantity {
+    color: #000;
+}
+
+/* Instructions: plain numbered steps instead of the margin badges */
+.recipe-instructions {
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.recipe-instructions ol {
+    padding-left: 0;
+}
+
+.recipe-instructions li {
+    border-bottom: none;
+    break-inside: avoid;
+    margin: 0 0 5pt;
+    padding: 0 0 0 24pt;
+}
+
+.recipe-instructions li:before {
+    background: none;
+    border-radius: 0;
+    color: #000;
+    font-size: 10pt;
+    height: auto;
+    left: 0;
+    line-height: inherit;
+    text-align: left;
+    top: 0;
+    width: auto;
+}
+
+.recipe-instructions li a {
+    color: #000;
+}
+
+.recipe-source,
+.recipe-tags {
+    border-top: 1pt solid #ddd;
+    font-size: 9pt;
+    margin: 10pt 0 0;
+    padding-top: 6pt;
+}
+
+.recipe-tags span {
+    background: none;
+    border: 0.5pt solid #ddd;
+}

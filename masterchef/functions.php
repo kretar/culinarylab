@@ -279,6 +279,11 @@ function masterchef_scripts() {
     
     // Recipe specific styles
     wp_enqueue_style('masterchef-recipe', MASTERCHEF_URI . '/assets/css/recipe.css', array(), MASTERCHEF_VERSION);
+
+    // Print layout for single recipes (loaded after recipe.css so it can override it)
+    if (is_singular('recipe')) {
+        wp_enqueue_style('masterchef-print', MASTERCHEF_URI . '/assets/css/print.css', array('masterchef-recipe'), MASTERCHEF_VERSION, 'print');
+    }
     
     // Front page specific styles
     if (is_front_page()) {

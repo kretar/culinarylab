@@ -28,7 +28,7 @@ get_header();
                             
                             <?php if (has_post_thumbnail()) : ?>
                                 <div class="recipe-featured-image">
-                                    <?php the_post_thumbnail('large'); ?>
+                                    <?php the_post_thumbnail('large', array('loading' => 'eager')); ?>
                                 </div>
                             <?php endif; ?>
                         </header>
