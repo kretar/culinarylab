@@ -12,7 +12,20 @@ ADMIN_EMAIL="${WP_ADMIN_EMAIL:-admin@example.com}"
 cd /var/www/html
 
 echo "Waiting for WordPress files and database..."
-until [ -f wp-config.php ] && wp db check --quiet >/dev/null 2>&1; do
+attempt=0
+while true; do
+    if [ ! -f wp-config.php ]; then
+        reason="wp-config.php not created yet"
+    elif ! err=$(wp eval 'if (!$GLOBALS["wpdb"]->check_connection(false)) { exit(1); }' 2>&1); then
+        reason="database not reachable: $err"
+    else
+        break
+    fi
+    attempt=$((attempt + 1))
+    # Report the reason every ~30 seconds so a stuck setup is diagnosable from the logs
+    if [ $((attempt % 10)) -eq 0 ]; then
+        echo "Still waiting ($reason)"
+    fi
     sleep 3
 done
 
