@@ -152,8 +152,16 @@ function masterchef_inline_to_files() {
         return;
     }
     
-    // Process all registered styles
+    // Styles this theme removes on purpose (see masterchef_remove_global_styles());
+    // extracting them would bring them back and depend on handles that no longer exist
+    $removed_handles = array('global-styles', 'wp-block-library', 'wp-block-library-theme', 'classic-theme-styles', 'wc-block-style');
+
+    // Process all enqueued styles
     foreach ($wp_styles->registered as $handle => $style) {
+        if (in_array($handle, $removed_handles, true) || !wp_style_is($handle, 'enqueued')) {
+            continue;
+        }
+
         // Check for inline styles
         if (!empty($wp_styles->registered[$handle]->extra['after'])) {
             $inline_css = implode("\n", $wp_styles->registered[$handle]->extra['after']);
@@ -168,8 +176,10 @@ function masterchef_inline_to_files() {
             $filename = sanitize_file_name('inline-' . $handle . '-' . substr(md5($inline_css), 0, 8) . '.css');
             $filepath = $css_dir . '/' . $filename;
             
-            // Write the CSS to file
-            file_put_contents($filepath, $inline_css);
+            // Write the CSS to file (the name contains a content hash, so only once per version)
+            if (!file_exists($filepath)) {
+                file_put_contents($filepath, $inline_css);
+            }
             
             // Enqueue the extracted file and clear inline CSS
             wp_enqueue_style($handle . '-extracted', MASTERCHEF_URI . '/assets/css/extracted/' . $filename, array($handle), filemtime($filepath));
