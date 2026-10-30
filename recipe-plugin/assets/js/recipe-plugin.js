@@ -13,11 +13,8 @@
      * Initialize recipe functionality
      */
     function initRecipeFunctionality() {
-        // Printing functionality
-        $('.recipe-print-button').on('click', function(e) {
-            e.preventDefault();
-            window.print();
-        });
+        // The print button is rendered and handled by the theme (masterchef recipe.js);
+        // binding it here too opened the print dialog twice.
 
         // Ingredient quantity adjustment
         $('.recipe-serving-adjuster').on('change', function() {
