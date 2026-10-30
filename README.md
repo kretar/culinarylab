@@ -39,7 +39,9 @@ A scientific laboratory approach to culinary arts inspired by molecular gastrono
    docker-compose up -d
    ```
 
-3. Access the site at http://localhost:8080
+3. Wait for the `setup` container to finish (`docker-compose logs -f setup`). It installs WordPress in Dutch, activates the theme and plugin, and adds sample recipes, categories and a blog post.
+
+4. Open http://localhost:8080 (admin at http://localhost:8080/wp-admin, login `admin` / `admin`, for local development only). To start over with a clean site, run `docker-compose down -v`.
 
 #### Production Installation
 
