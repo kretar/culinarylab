@@ -17,11 +17,12 @@ while true; do
     if [ ! -f wp-config.php ]; then
         reason="wp-config.php not created yet"
     else
-        # `core is-installed` exits 1 silently when the database works but WordPress is not
-        # installed yet; any output means the database connection itself failed.
+        # `core is-installed` exits 1 when the database works but WordPress is not installed
+        # yet. PHP warnings on stderr (e.g. missing HTTP_HOST under CLI) are noise; only an
+        # actual error message means the database connection failed.
         rc=0
         err=$(wp core is-installed 2>&1) || rc=$?
-        if [ "$rc" -eq 0 ] || [ -z "$err" ]; then
+        if [ "$rc" -eq 0 ] || ! echo "$err" | grep -qE 'Error establishing|^Error:|Fatal error'; then
             break
         fi
         reason="database not reachable: $err"
