@@ -95,10 +95,14 @@ add_action('wp_loaded', 'masterchef_force_file_includes');
 function masterchef_setup() {
     // Disable WordPress 5.9+ global styles and SVGs
     remove_action('wp_enqueue_scripts', 'wp_enqueue_global_styles');
+    remove_action('wp_footer', 'wp_enqueue_global_styles', 1);
+    remove_action('wp_enqueue_scripts', 'wp_enqueue_global_styles_css_custom_properties');
     remove_action('wp_body_open', 'wp_global_styles_render_svg_filters');
     
-    // Remove speculationrules added in WordPress 6.4+
-    remove_action('wp_head', 'wp_add_speculation_rules_tag');
+    // Remove the speculationrules inline script (WordPress 6.8+); the CSP blocks inline scripts.
+    // Returning null from this filter disables speculative loading.
+    add_filter('wp_speculation_rules_configuration', '__return_null');
+    remove_action('wp_footer', 'wp_print_speculation_rules');
     // Add default posts and comments RSS feed links to head.
     add_theme_support('automatic-feed-links');
 
@@ -190,21 +194,13 @@ function masterchef_inline_to_files() {
 add_action('wp_head', 'masterchef_inline_to_files', 1);
 
 /**
- * Remove speculationrules and other inline scripts/styles
+ * The CSP forbids inline styles, so stop WordPress from inlining stylesheets.
+ *
+ * Core inlines small block stylesheets as <style> tags, and some of them are inserted
+ * into the head after the page has been rendered, where an output buffer cannot reach them.
+ * With a limit of 0 they are linked as normal files instead.
  */
-function masterchef_clean_head_output() {
-    // Remove directly from the output buffer
-    ob_start(function($output) {
-        // Remove speculationrules JSON scripts from head
-        $output = preg_replace('/<script type="speculationrules">.*?<\/script>/s', '', $output);
-        
-        // Remove ALL inline style tags - this is more aggressive but ensures all inline styles are gone
-        $output = preg_replace('/<style\b[^>]*>(.*?)<\/style>/s', '', $output);
-        
-        return $output;
-    });
-}
-add_action('wp_head', 'masterchef_clean_head_output', 0);
+add_filter('styles_inline_size_limit', '__return_zero');
 
 /**
  * Add Content Security Policy
@@ -218,7 +214,7 @@ function masterchef_add_csp_headers() {
     // Define CSP policy with default-src 'none' for maximum security
     // This means we must explicitly allow ALL resource types
     $csp = "default-src 'none'; " .
-           "script-src 'self' https://fonts.googleapis.com https://ajax.googleapis.com; " .
+           "script-src 'self'; " .
            "style-src 'self' https://fonts.googleapis.com; " .
            "font-src 'self' data: https://fonts.gstatic.com; " .
            "img-src 'self' data: https:; " .
