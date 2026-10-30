@@ -170,6 +170,18 @@ h1:after,
     padding: 0;
 }
 
+/* Page breaks: keep an ingredient list in one piece (it moves to the next page as a whole)
+   and keep every heading with the content below it */
+.recipe-ingredients {
+    break-inside: avoid;
+}
+
+.recipe-section-title,
+.recipe-ingredients-title,
+.recipe-instructions-title {
+    break-after: avoid;
+}
+
 .recipe-ingredients-title,
 .recipe-instructions-title {
     border-bottom: 1pt solid #ddd;
