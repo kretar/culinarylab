@@ -16,10 +16,15 @@ attempt=0
 while true; do
     if [ ! -f wp-config.php ]; then
         reason="wp-config.php not created yet"
-    elif ! err=$(wp eval 'if (!$GLOBALS["wpdb"]->check_connection(false)) { exit(1); }' 2>&1); then
-        reason="database not reachable: $err"
     else
-        break
+        # `core is-installed` exits 1 silently when the database works but WordPress is not
+        # installed yet; any output means the database connection itself failed.
+        rc=0
+        err=$(wp core is-installed 2>&1) || rc=$?
+        if [ "$rc" -eq 0 ] || [ -z "$err" ]; then
+            break
+        fi
+        reason="database not reachable: $err"
     fi
     attempt=$((attempt + 1))
     # Report the reason every ~30 seconds so a stuck setup is diagnosable from the logs
