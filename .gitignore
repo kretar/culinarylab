@@ -1,3 +1,6 @@
 .DS_Store
 */.DS_Store
 **/.DS_Store
+# Written at runtime by the theme (see functions.php)
+masterchef/assets/css/extracted/
+masterchef/assets/js/generated/
