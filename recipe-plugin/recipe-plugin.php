@@ -27,6 +27,7 @@ define('RECIPE_PLUGIN_BASENAME', plugin_basename(__FILE__));
 require_once RECIPE_PLUGIN_DIR . 'includes/post-types.php';
 require_once RECIPE_PLUGIN_DIR . 'includes/meta-boxes.php';
 require_once RECIPE_PLUGIN_DIR . 'includes/taxonomies.php';
+require_once RECIPE_PLUGIN_DIR . 'includes/category-icons.php';
 
 /**
  * Load plugin text domain for translations

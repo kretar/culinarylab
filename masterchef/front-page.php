@@ -142,13 +142,17 @@ get_header();
                     foreach ($recipe_cats as $cat) :
                         // Get an image for the category if available
                         $cat_image = get_term_meta($cat->term_id, 'category_image', true);
+                        // Icon chosen in the admin (recipe plugin); empty when none is set or the plugin is off
+                        $cat_icon_svg = function_exists('recipe_plugin_category_icon_svg') ? recipe_plugin_category_icon_svg(get_term_meta($cat->term_id, 'category_icon', true)) : '';
                         ?>
                         <a href="<?php echo esc_url(get_term_link($cat)); ?>" class="recipe-category-card">
                             <div class="recipe-category-image">
                                 <?php if ($cat_image) : ?>
                                     <img src="<?php echo esc_url($cat_image); ?>" alt="<?php echo esc_attr($cat->name); ?>">
+                                <?php elseif ($cat_icon_svg) : ?>
+                                    <div class="recipe-category-icon"><?php echo $cat_icon_svg; // phpcs:ignore WordPress.Security.EscapeOutput -- built by the recipe plugin from a fixed icon set ?></div>
                                 <?php else : ?>
-                                    <div class="recipe-category-icon"><?php echo esc_html(substr($cat->name, 0, 1)); ?></div>
+                                    <div class="recipe-category-icon"><?php echo esc_html(mb_substr($cat->name, 0, 1)); ?></div>
                                 <?php endif; ?>
                             </div>
                             <h3 class="recipe-category-name"><?php echo esc_html($cat->name); ?></h3>
