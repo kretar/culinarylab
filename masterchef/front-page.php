@@ -53,7 +53,7 @@ get_header();
     <div class="featured-section">
         <div class="section-header">
             <h2 class="section-title"><?php echo $is_dutch ? __('Uitgelichte Recepten', 'masterchef') : __('Featured Recipes', 'masterchef'); ?></h2>
-            <a href="<?php echo esc_url(get_post_type_archive_link('recipe')); ?>" class="view-all"><?php echo $is_dutch ? __('Alle Recepten', 'masterchef') : __('All Recipes', 'masterchef'); ?> →</a>
+            <a href="<?php echo esc_url(get_post_type_archive_link('recipe')); ?>" class="view-all"><?php echo $is_dutch ? __('Bekijk alle recepten', 'masterchef') : __('View all recipes', 'masterchef'); ?> →</a>
         </div>
 
         <div class="recipe-featured-grid">
@@ -108,8 +108,8 @@ get_header();
         <div id="primary" class="content-area">
             <main id="main" class="site-main">
                 <div class="section-header">
-                    <h2 class="section-title"><?php echo $is_dutch ? __('Laatste artikelen', 'masterchef') : __('Latest Articles', 'masterchef'); ?></h2>
-                    <a href="<?php echo esc_url(get_permalink($posts_page_id)); ?>" class="view-all"><?php echo $is_dutch ? __('Alle Artikelen', 'masterchef') : __('All Articles', 'masterchef'); ?> →</a>
+                    <h2 class="section-title"><?php echo $is_dutch ? __('Technieken', 'masterchef') : __('Techniques', 'masterchef'); ?></h2>
+                    <a href="<?php echo esc_url(get_permalink($posts_page_id)); ?>" class="view-all"><?php echo $is_dutch ? __('Alle technieken', 'masterchef') : __('All techniques', 'masterchef'); ?> →</a>
                 </div>
 
                 <div class="posts-grid">

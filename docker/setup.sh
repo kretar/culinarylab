@@ -130,13 +130,13 @@ fi
 if [ "$(wp option get page_for_posts)" = "0" ]; then
     echo "Creating sample blog content..."
     home_id=$(wp post create --porcelain --post_type=page --post_status=publish --post_title="Home")
-    blog_id=$(wp post create --porcelain --post_type=page --post_status=publish --post_title="Blog")
+    blog_id=$(wp post create --porcelain --post_type=page --post_status=publish --post_title="Technieken")
     wp option update show_on_front page >/dev/null
     wp option update page_on_front "$home_id" >/dev/null
     wp option update page_for_posts "$blog_id" >/dev/null
     wp post create --post_type=post --post_status=publish \
-        --post_title="Welkom bij Culinary Lab" \
-        --post_content="Dit is een voorbeeldartikel." >/dev/null
+        --post_title="Eiwitten stijf kloppen" \
+        --post_content="Voorbeeldtechniek: gebruik een schone, vetvrije kom en klop de eiwitten tot er stijve pieken ontstaan." >/dev/null
 fi
 
 echo "Done. Site: $SITE_URL  Login: $ADMIN_USER / $ADMIN_PASSWORD"
