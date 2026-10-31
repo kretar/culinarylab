@@ -360,8 +360,10 @@ function masterchef_recipe_search_query($query) {
                 // Create a custom search configuration
                 global $wpdb;
                 
-                // Clear the standard 's' parameter to prevent default WordPress search
+                // Clear the standard 's' parameter to prevent default WordPress search,
+                // but keep the term so get_search_query() can still show it (see below)
                 $query->set('s', '');
+                $query->set('recipe_search_term', $search_term);
                 
                 // Define meta keys to search in
                 $meta_keys = array(
@@ -416,6 +418,16 @@ function masterchef_recipe_search_query($query) {
     return $query;
 }
 add_action('pre_get_posts', 'masterchef_recipe_search_query');
+
+/**
+ * get_search_query() reads the 's' query var, which the custom search above clears.
+ * Return the remembered term so the results heading, search forms and document title show it.
+ */
+function masterchef_restore_search_query($search_query) {
+    $term = get_query_var('recipe_search_term');
+    return $term ? $term : $search_query;
+}
+add_filter('get_search_query', 'masterchef_restore_search_query');
 
 /**
  * Add custom classes to recipe posts while removing the post-type class
