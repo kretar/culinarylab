@@ -353,4 +353,32 @@ code, pre {
     color: rgba(255,255,255,0.6);
 }
 
+/* Post meta (author, date, categories, comments) with inline SVG icons */
+.post-meta {
+    align-items: center;
+    color: var(--gray-color);
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 0.9rem;
+    gap: var(--spacing-xs) var(--spacing-lg);
+    margin: var(--spacing-sm) 0 var(--spacing-md);
+}
+
+.post-meta > span {
+    align-items: center;
+    display: inline-flex;
+    gap: var(--spacing-xs);
+}
+
+.post-meta .meta-icon {
+    color: var(--secondary-color);
+    display: inline-flex;
+}
+
+.post-meta .icon {
+    display: block;
+    height: 1em;
+    width: 1em;
+}
+
 /* Recipe specific styles will be added in recipe.css */
