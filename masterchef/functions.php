@@ -391,22 +391,34 @@ function masterchef_recipe_search_query($query) {
                     )
                 ";
                 
-                // Add our custom SQL to the query
-                add_filter('posts_where', function($where) use ($wpdb, $search_term, $search_sql) {
+                // Add our custom SQL to the main query only. Both filters remove themselves
+                // after they have run, so they do not leak into later queries on the page
+                // (sidebar widgets, related posts, ...).
+                $where_filter = function($where, $current_query) use (&$where_filter, $query, $wpdb, $search_term, $search_sql) {
+                    if ($current_query !== $query) {
+                        return $where;
+                    }
+                    remove_filter('posts_where', $where_filter, 10);
                     return $where . $wpdb->prepare(
                         $search_sql,
                         '%' . $wpdb->esc_like($search_term) . '%',
                         '%' . $wpdb->esc_like($search_term) . '%'
                     );
-                });
-                
+                };
+                add_filter('posts_where', $where_filter, 10, 2);
+
                 // We need to do a GROUP BY to avoid duplicate results
-                add_filter('posts_groupby', function($groupby) use ($wpdb) {
+                $groupby_filter = function($groupby, $current_query) use (&$groupby_filter, $query, $wpdb) {
+                    if ($current_query !== $query) {
+                        return $groupby;
+                    }
+                    remove_filter('posts_groupby', $groupby_filter, 10);
                     if (!$groupby) {
                         return "$wpdb->posts.ID";
                     }
                     return $groupby;
-                });
+                };
+                add_filter('posts_groupby', $groupby_filter, 10, 2);
             }
         }
     }
