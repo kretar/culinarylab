@@ -68,6 +68,16 @@ for entry in "BBQ:bbq" "Dessert:dessert" "Salade:salade" "Taart:taart"; do
     fi
 done
 
+# Category icons (term meta category_icon, set in the admin on the category screen)
+for entry in "bbq:bbq" "dessert:dessert" "salade:salad" "taart:cake"; do
+    slug="${entry%%:*}"
+    icon="${entry##*:}"
+    term_id=$(wp term get recipe_category "$slug" --by=slug --field=term_id 2>/dev/null || true)
+    if [ -n "$term_id" ] && [ -z "$(wp term meta get "$term_id" category_icon 2>/dev/null || true)" ]; then
+        wp term meta update "$term_id" category_icon "$icon" >/dev/null
+    fi
+done
+
 # Sample recipes: each one is created only if no recipe with that title exists yet,
 # so re-running setup adds new samples to an existing site
 recipe_exists() {

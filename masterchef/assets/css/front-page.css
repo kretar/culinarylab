@@ -376,6 +376,11 @@
     object-fit: cover;
 }
 
+.recipe-category-icon svg {
+    height: 44px;
+    width: 44px;
+}
+
 .recipe-category-icon {
     font-size: 24px;
     font-weight: bold;
