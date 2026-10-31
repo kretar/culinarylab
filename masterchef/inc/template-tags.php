@@ -42,6 +42,33 @@ function masterchef_main_navigation() {
 }
 
 /**
+ * Returns an inline SVG icon.
+ *
+ * Icons are inline SVG because the CSP does not allow a CDN icon font. They use
+ * currentColor, so they follow the text colour, and carry no style attributes.
+ *
+ * @param string $name  Icon name, one of the keys below.
+ * @param string $class Extra CSS class for the <svg> element.
+ * @return string SVG markup, or an empty string for an unknown name.
+ */
+function masterchef_icon($name, $class = '') {
+    $icons = array(
+        'user'     => '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>',
+        'calendar' => '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+        'folder'   => '<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+        'comment'  => '<path d="M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+    );
+
+    if (!isset($icons[$name])) {
+        return '';
+    }
+
+    $class = trim('icon icon-' . $name . ' ' . $class);
+
+    return '<svg class="' . esc_attr($class) . '" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">' . $icons[$name] . '</svg>';
+}
+
+/**
  * Displays post meta information
  */
 function masterchef_post_meta() {
@@ -49,21 +76,21 @@ function masterchef_post_meta() {
     
     // Author
     echo '<span class="post-author">';
-    echo '<span class="meta-icon"><i class="fas fa-user"></i></span>';
+    echo '<span class="meta-icon">' . masterchef_icon('user') . '</span>';
     echo '<span class="meta-text">' . esc_html__('By', 'masterchef') . ' ';
     the_author_posts_link();
     echo '</span></span>';
     
     // Date
     echo '<span class="post-date">';
-    echo '<span class="meta-icon"><i class="fas fa-calendar"></i></span>';
+    echo '<span class="meta-icon">' . masterchef_icon('calendar') . '</span>';
     echo '<span class="meta-text">' . get_the_date() . '</span>';
     echo '</span>';
     
     // Categories
     if (has_category()) {
         echo '<span class="post-categories">';
-        echo '<span class="meta-icon"><i class="fas fa-folder"></i></span>';
+        echo '<span class="meta-icon">' . masterchef_icon('folder') . '</span>';
         echo '<span class="meta-text">' . get_the_category_list(', ') . '</span>';
         echo '</span>';
     }
@@ -71,7 +98,7 @@ function masterchef_post_meta() {
     // Comments
     if (!post_password_required() && (comments_open() || get_comments_number())) {
         echo '<span class="post-comments">';
-        echo '<span class="meta-icon"><i class="fas fa-comment"></i></span>';
+        echo '<span class="meta-icon">' . masterchef_icon('comment') . '</span>';
         echo '<span class="meta-text">';
         comments_popup_link(
             __('No Comments', 'masterchef'),
