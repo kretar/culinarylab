@@ -240,7 +240,7 @@ add_action('send_headers', 'masterchef_add_csp_headers');
  * Enables the HTTP Strict Transport Security (HSTS) header
  */
 function masterchef_add_secure_header() {
-    header( 'Strict-Transport-Security: max-age=31536000' );
+    header( 'Strict-Transport-Security: max-age=31536000; includeSubDomains; preload' );
     header( 'Referrer-Policy: same-origin' );
     header( 'X-Content-Type-Options: nosniff' );
     header( 'X-Frame-Options: SAMEORIGIN' );
