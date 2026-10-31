@@ -2,6 +2,34 @@
 
 All notable changes to the Master Chef WordPress theme project will be documented in this file.
 
+## 1.2.0 - 2026-10-31
+
+### Added
+- Print layout for recipes: compact header with cover image, one row of recipe details, an empty tick box per ingredient and plain numbered steps; ingredient lists and headings stay together across page breaks
+- Editors can pick an icon for each recipe category (Recepten > Categorieën); it is shown on the homepage category cards, with the first letter as fallback
+- Inline SVG icons for author, date, category and comments in the post meta
+- Local development: the Docker environment now installs and fills WordPress automatically (dev only)
+
+### Changed
+- Homepage: the articles section is now "Technieken" ("Alle technieken") and the recipe link reads "Bekijk alle recepten"; the section is hidden when there is no posts page or no posts
+- Footer shows the site name instead of "Master Chef"
+- Inline styles and scripts are no longer emitted by WordPress instead of being stripped with a regex; `script-src` is limited to `'self'`
+- HSTS header includes `includeSubDomains; preload`
+
+### Fixed
+- "Alle Artikelen" linked to a recipe when no posts page was set
+- Print: missing title and cover image, tick boxes overlapping the ingredients, recipe navigation printed, print dialog opening twice
+- "Skip to content" link was always visible; it now appears on keyboard focus
+- Search results heading did not show the search term; the custom search also emptied widgets such as Recent Posts
+- Debug notice about `wp-block-library-extracted` and block styles being blocked by the CSP
+- Missing post meta icons (Font Awesome was never loaded)
+
+### Upgrade notes
+- Update the theme and the recipe plugin together: the category icons are stored and chosen in the plugin and shown by the theme
+- After upgrading, pick an icon per category under Recepten > Categorieën
+- To show "Technieken" on the homepage: create a page, set it as the posts page (Instellingen > Lezen) and publish posts
+- Known issue: search does not look inside multi-part recipes yet
+
 ## 1.1.4 - 2025-06-07
 
 ### Added
