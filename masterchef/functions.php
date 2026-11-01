@@ -438,6 +438,28 @@ function masterchef_restore_search_query($search_query) {
 add_filter('get_search_query', 'masterchef_restore_search_query');
 
 /**
+ * Page size for the recipe grids (archive, categories, tags and recipe search).
+ *
+ * The WordPress setting "posts per page" defaults to 10, which leaves a single card in the last
+ * row of a 3 column grid. 12 fills complete rows for 1, 2, 3 and 4 columns. Use the
+ * masterchef_recipe_grid_page_size filter to change it, keeping it a multiple of the column count.
+ */
+function masterchef_recipe_grid_page_size($query) {
+    if (is_admin() || !$query->is_main_query()) {
+        return;
+    }
+
+    $is_recipe_grid = $query->is_post_type_archive('recipe')
+        || $query->is_tax(array('recipe_category', 'recipe_tag'))
+        || ($query->is_search() && 'recipe' === $query->get('post_type'));
+
+    if ($is_recipe_grid) {
+        $query->set('posts_per_page', (int) apply_filters('masterchef_recipe_grid_page_size', 12));
+    }
+}
+add_action('pre_get_posts', 'masterchef_recipe_grid_page_size');
+
+/**
  * Add custom classes to recipe posts while removing the post-type class
  */
 function masterchef_custom_post_classes($classes, $class, $post_id) {
