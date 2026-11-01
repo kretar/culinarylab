@@ -30,6 +30,8 @@
                 </div>
 
                 <?php masterchef_main_navigation(); ?>
+
+                <?php masterchef_account_links(); ?>
             </div>
         </div>
     </header><!-- #masthead -->

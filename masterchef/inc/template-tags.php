@@ -130,6 +130,32 @@ function masterchef_footer_navigation() {
 }
 
 /**
+ * Displays the account links in the site header.
+ *
+ * Logged out: a login link that returns to the page the visitor was on.
+ * Logged in: a logout link, plus a link to the admin for users who can edit content.
+ */
+function masterchef_account_links() {
+    global $wp;
+
+    $is_dutch = strpos(get_locale(), 'nl') !== false;
+    $current  = home_url(add_query_arg(array(), $wp->request));
+
+    echo '<nav class="header-account" aria-label="Account">';
+
+    if (is_user_logged_in()) {
+        if (current_user_can('edit_posts')) {
+            echo '<a href="' . esc_url(admin_url()) . '">' . esc_html($is_dutch ? 'Beheer' : 'Dashboard') . '</a>';
+        }
+        echo '<a href="' . esc_url(wp_logout_url($current)) . '">' . esc_html($is_dutch ? 'Uitloggen' : 'Log out') . '</a>';
+    } else {
+        echo '<a href="' . esc_url(wp_login_url($current)) . '">' . masterchef_icon('user') . '<span>' . esc_html($is_dutch ? 'Inloggen' : 'Log in') . '</span></a>';
+    }
+
+    echo '</nav>';
+}
+
+/**
  * Displays the post thumbnail
  */
 function masterchef_post_thumbnail($size = 'post-thumbnail') {
