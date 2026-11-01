@@ -32,6 +32,8 @@
                 </div><!-- .site-info -->
 
                 <?php masterchef_footer_navigation(); ?>
+
+                <?php masterchef_account_links(); ?>
             </div>
         </div>
     </footer><!-- #colophon -->
