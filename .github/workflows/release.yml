@@ -1,0 +1,40 @@
+name: Release
+
+# One release per tag, with the theme and the plugin attached to it.
+# Run manually (Actions > Release > Run workflow) to build and verify the zips without releasing.
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build and verify packages
+        env:
+          RELEASE_TAG: ${{ github.ref_type == 'tag' && github.ref_name || '' }}
+        run: sh scripts/package.sh dist
+
+      - name: Upload packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: packages
+          path: dist/*.zip
+          retention-days: 90
+
+      - name: Create release
+        if: github.ref_type == 'tag'
+        uses: softprops/action-gh-release@v2
+        with:
+          name: CulinaryLab ${{ github.ref_name }}
+          body_path: dist/release-notes.md
+          files: dist/*.zip
+          draft: false
+          prerelease: false

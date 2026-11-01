@@ -7,3 +7,7 @@ masterchef/assets/js/generated/
 
 # Local working notes
 TASKS.md
+
+# Built by scripts/package.sh
+dist/
+*.zip
