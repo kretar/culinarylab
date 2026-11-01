@@ -381,22 +381,47 @@ code, pre {
     width: 1em;
 }
 
-/* Account links (login / logout) in the footer */
-.footer-account {
+/* Account links (login / logout) in the header; they wrap below the branding on narrow screens */
+.header-inner {
+    flex-wrap: wrap;
+    gap: var(--spacing-sm) var(--spacing-md);
+}
+
+.header-account {
     display: flex;
-    gap: var(--spacing-md);
-    justify-content: center;
-    margin-top: var(--spacing-sm);
+    gap: var(--spacing-sm);
+    margin-left: auto;
 }
 
-.footer-account a {
-    color: rgba(255,255,255,0.6);
-    text-decoration: underline;
+.header-account a {
+    align-items: center;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: var(--border-radius);
+    color: var(--light-color);
+    display: inline-flex;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 12px;
+    gap: var(--spacing-xs);
+    letter-spacing: 1px;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    text-transform: uppercase;
 }
 
-.footer-account a:hover,
-.footer-account a:focus {
-    color: #fff;
+.header-account a:hover,
+.header-account a:focus {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+/* Small screens: keep the title and the login button on one row; the tagline is repeated in the hero */
+@media (max-width: 600px) {
+    .site-description {
+        display: none;
+    }
+
+    .site-title {
+        white-space: nowrap;
+    }
 }
 
 /* Recipe specific styles will be added in recipe.css */
