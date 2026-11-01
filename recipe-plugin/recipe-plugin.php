@@ -45,6 +45,12 @@ add_action('plugins_loaded', 'recipe_plugin_load_textdomain');
  * Activation hook
  */
 function recipe_plugin_activate() {
+    // The 'init' hook has already run when a plugin is activated, so the post type and
+    // taxonomies are not registered yet. Register them first, otherwise the flushed
+    // rewrite rules lack the recipe URLs and every recipe returns a 404.
+    recipe_plugin_register_post_types();
+    recipe_plugin_register_taxonomies();
+
     // Flush rewrite rules on activation
     flush_rewrite_rules();
 }
