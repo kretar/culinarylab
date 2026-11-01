@@ -2,6 +2,25 @@
 
 All notable changes to the Master Chef WordPress theme project will be documented in this file.
 
+## 1.2.1 - 2026-11-01
+
+### Added
+- Login and logout links in the header: "Inloggen" for visitors (returns to the page they were on), "Uitloggen" and, for users who can edit content, "Beheer" for logged-in users
+- The recipe plugin repairs its recipe URLs by itself after an install or upgrade
+
+### Changed
+- Recipe overview, category and tag pages and recipe search show 12 recipes per page, so the last row is no longer left with a single recipe
+- The release zips now contain a fixed folder (`culinarylab/` and `recipe-plugin/`), so WordPress installs them under the same name every time instead of a randomly suffixed folder; both zips are attached to one release
+- Release builds verify the version numbers, the tag and the changelog
+
+### Fixed
+- Every recipe, and the recipe overview, returned a 404 after installing or re-activating the recipe plugin until permalinks were saved
+
+### Upgrade notes
+- **One-time migration:** sites installed from the 1.2.0 zips or earlier have the theme and plugin in randomly suffixed folders (for example `culinarylab-Xh8p69PnPlsyLB6m` and `recipe-plugin-1.2.0-3-Llzf5nTCloQ0cuGp`). Upload both new zips, then deactivate the old plugin and activate the new `recipe-plugin`, activate the new `culinarylab` theme and check Appearance > Menus and Widgets (theme settings are stored per theme folder), and finally delete the old folders. Never keep two copies of the plugin active at the same time
+- After this, upgrades are: upload the zip and choose "Replace current with uploaded"
+- If recipe pages show a 404, save Settings > Permalinks once
+
 ## 1.2.0 - 2026-10-31
 
 ### Added
