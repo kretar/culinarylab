@@ -45,40 +45,23 @@ A scientific laboratory approach to culinary arts inspired by molecular gastrono
 
 #### Production Installation
 
-1. Download the latest release .zip files for both the theme and plugin
+1. Open the [latest release](https://github.com/kretar/culinarylab/releases/latest) and download the two attached files, `culinarylab-x.x.x.zip` and `recipe-plugin-x.x.x.zip` (not "Source code").
 2. In your WordPress admin:
-   - Navigate to Appearance → Themes → Add New → Upload Theme
-   - Upload and activate the `culinarylab-x.x.x.zip` file
-   - Navigate to Plugins → Add New → Upload Plugin
-   - Upload and activate the `recipe-plugin-x.x.x.zip` file
+   - Appearance → Themes → Add New → Upload Theme → upload `culinarylab-x.x.x.zip` → Activate
+   - Plugins → Add New → Upload Plugin → upload `recipe-plugin-x.x.x.zip` → Activate
+
+Both zips contain a single fixed folder (`culinarylab/` and `recipe-plugin/`), so WordPress installs them under those names whatever the file is called.
 
 #### Installing Upgrades
 
-1. Download the latest release .zip files from the [Releases page](https://github.com/kretar/culinarylab/releases)
-2. Before upgrading, make a complete backup of your site (files and database)
-3. For the theme:
-   - In WordPress admin, navigate to Appearance → Themes → Add New → Upload Theme
-   - Upload the new `culinarylab-x.x.x.zip` file (WordPress will update the existing theme)
-   - The theme update will be applied automatically
+1. Make a backup of your site (files and database).
+2. Upload the new zips exactly as for a first installation. When WordPress reports that the theme or plugin is already installed, choose **Replace current with uploaded**.
+3. The plugin repairs the recipe URLs itself after an upgrade. If recipe pages still show a 404, go to Settings → Permalinks and save once.
+4. Open a recipe and the home page to check.
 
-4. For the plugin (safest method that preserves your recipe data):
-   - Use FTP or your hosting file manager to access your WordPress installation
-   - Navigate to `/wp-content/plugins/`
-   - Rename the existing `recipe-plugin` folder to `recipe-plugin-old` (this preserves your data while preventing conflicts)
-   - In WordPress admin, go to Plugins → Add New → Upload Plugin
-   - Upload the new `recipe-plugin-x.x.x.zip` file
-   - Activate the newly uploaded plugin
-   - Verify all recipes are intact with their data
-   - If everything works correctly, you can delete the `recipe-plugin-old` folder
+Recipes are stored in the database, not in the plugin folder, so replacing the plugin does not touch them.
 
-5. Alternative plugin update method (for advanced users):
-   - Make sure you have a complete database backup
-   - Deactivate the Recipe Plugin in WordPress admin
-   - Install a plugin like "WP Reset" that can manage plugin deactivation without data loss
-   - Delete the plugin files through WordPress
-   - Upload and activate the new version
-   
-6. Verify that all recipes display correctly after the upgrade
+**One-time migration from releases before 1.2.1:** older zips had no folder inside, so WordPress installed them in folders with a random suffix (for example `culinarylab-Xh8p69PnPlsyLB6m` and `recipe-plugin-1.2.0-3-Llzf5nTCloQ0cuGp`). Upload the new zips, then: deactivate the old plugin and activate the new `recipe-plugin`; activate the new `culinarylab` theme and check Appearance → Menus and Widgets (theme settings are stored per theme folder); finally delete the old folders. Do not keep two copies of the plugin active at the same time.
 
 ## 🧪 Using the Theme
 
@@ -159,24 +142,30 @@ recipe-plugin/
 
 ## 📦 Release Process
 
-The project uses GitHub Actions for automated builds and releases:
+Releases are built by one GitHub Actions workflow (`.github/workflows/release.yml`) that attaches the theme and plugin zips to a single release.
 
-1. Update version numbers in:
-   - `masterchef/style.css`
-   - `masterchef/functions.php`
-   - `recipe-plugin/recipe-plugin.php`
-
-2. Update `CHANGELOG.md` with new version details
-
-3. Commit changes and create a new tag:
+1. Set the new version everywhere it is stored:
    ```bash
-   git add .
-   git commit -m "Bump version to x.x.x"
+   scripts/bump-version.sh x.x.x
+   ```
+   This updates `masterchef/style.css`, `masterchef/functions.php` and `recipe-plugin/recipe-plugin.php`.
+
+2. Add a `## x.x.x - YYYY-MM-DD` section to `CHANGELOG.md`. It becomes the release notes.
+
+3. Optionally build the zips locally to see what will be released (output in `dist/`):
+   ```bash
+   sh scripts/package.sh
+   ```
+   The script refuses to build when the version numbers disagree or the changelog entry is missing.
+
+4. Merge the change, then tag `main`:
+   ```bash
+   git checkout main && git pull
    git tag -a vx.x.x -m "Release version x.x.x"
-   git push origin main vx.x.x
+   git push origin vx.x.x
    ```
 
-4. GitHub Actions will automatically build and create releases with proper .zip packages
+5. The workflow checks that the tag matches the version in the code, builds and verifies both zips and publishes one release. To try the build without releasing, run Actions → Release → Run workflow.
 
 ## 🧑‍🔬 Contributing
 

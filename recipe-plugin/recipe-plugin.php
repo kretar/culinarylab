@@ -57,6 +57,21 @@ function recipe_plugin_activate() {
 register_activation_hook(__FILE__, 'recipe_plugin_activate');
 
 /**
+ * Flush the rewrite rules once whenever the plugin version changes.
+ *
+ * Installing or replacing the plugin (even in a differently named folder) leaves WordPress with
+ * rewrite rules that do not know the recipe URLs, and every recipe returns a 404 until
+ * permalinks are saved. Running late on 'init' makes sure the post type is registered first.
+ */
+function recipe_plugin_maybe_flush_rewrite_rules() {
+    if (get_option('recipe_plugin_version') !== RECIPE_PLUGIN_VERSION) {
+        flush_rewrite_rules();
+        update_option('recipe_plugin_version', RECIPE_PLUGIN_VERSION);
+    }
+}
+add_action('init', 'recipe_plugin_maybe_flush_rewrite_rules', 99);
+
+/**
  * Deactivation hook
  */
 function recipe_plugin_deactivate() {
